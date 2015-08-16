@@ -88,11 +88,10 @@
 					hr.onreadystatechange = function(){
 						if(hr.readyState==4 && hr.status==200){
 							var return_data=hr.responseText;
-							document.getElementById("status").innerHTML = return_data;
+							submit.value = return_data;
 						}
 						else{
-						alert(hr.responseText);
-						alert(hr.statusText);
+							alert(hr.statusText);
 						}
 					}
 					hr.send(vars);
