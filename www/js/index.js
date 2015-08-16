@@ -11,7 +11,7 @@ var app = {
         document.addEventListener('deviceready', this.onDeviceReady, false);
 		//====================================================================================
 		//FALSE DEVICE-READY SEND
-		setTimeout(function(){app.receivedEvent('deviceready');}, 1000);
+		//setTimeout(function(){app.receivedEvent('deviceready');}, 1000);
 		//FALSE DEVICE-READY SEND
 		//====================================================================================
     },
@@ -45,5 +45,9 @@ var handleDOM ={
 	remove: function(id){
 		var element = document.getElementById(id);
 		element.parentNode.removeChild(element);
+	},
+	
+	br: function(){
+		document.createElement('br');
 	}
 };

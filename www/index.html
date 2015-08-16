@@ -73,9 +73,31 @@
 			
 		//===================sign up page============================
 			signup: function(){
-				var test = document.createElement("DIV");
-				king.appendChild(test);
-				test.innerHTML="Sign Up Page";
+				handleDOM.create("signup", "FORM", king);
+				var signup=document.getElementById("signup");
+				signup.innerHTML="<br>ASU Email: <input type='text' id= 'email' /><br><br>Password: <input type='text' id='password' /><br><br><input type='button' value='Create Account' id='submitform' />"
+				var submit = document.getElementById("submitform");
+				submit.onclick=function(){
+					var  hr = new XMLHttpRequest();
+					var url= "http://strugglingdev-games.com/social.php";
+					var em = document.getElementById("email").value;
+					var pw = document.getElementById("password").value;
+					var vars = "email="+em+"&password="+pw;
+					hr.open("POST", url, true);
+					hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+					hr.onreadystatechange = function(){
+						if(hr.readyState==4 && hr.status==200){
+							var return_data=hr.responseText;
+							document.getElementById("status").innerHTML = return_data;
+						}
+						else{
+						alert(hr.responseText);
+						alert(hr.statusText);
+						}
+					}
+					hr.send(vars);
+					submit.value = "processing...";
+				}
 			},
 			
 		//===================login page==============================
