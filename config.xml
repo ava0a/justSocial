@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget>
+<widget id="com.social.strugglingdev-games" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Social</name>
     <description>
-        N/A
+        N/As
     </description>
-    <author email="DVawter@asu.edu">
+    <author email="DVawter@asu.edu" href="http://strugglingdev-games.com/">
         Darren Vawter
     </author>
     <content src="index.html" />
