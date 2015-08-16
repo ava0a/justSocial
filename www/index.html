@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<title>Social</title>
+    </head>
+    <body>
+		<!-----------------loading page----------------------------->
+        <div id="king">
+			<h1>Social</h1>
+			<div id="deviceready">
+				<p>Connecting To Device</p>
+			</div>
+		</div>
+		
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script>
+		//===================globals================================
+		var king = document.getElementById("king");
+		var docWidth= $(document).width();
+		var docHeight= $(document).height();
+				
+		//================device ready==============================
+        app.initialize();
+		
+		var page={
+		//===================entry page=============================
+			entry: function(){
+				
+				//signup div
+				handleDOM.create("signup", "DIV", king);
+				signup=document.getElementById("signup");
+				
+				signup.innerHTML="Sign Up";
+				signup.style.position = "absolute";
+				signup.style.textAlign = "center";
+				signup.style.border = "thick solid #0000FF";
+				signup.style.left=docWidth*.45 + "px";
+				signup.style.top=docHeight*.525 +"px";
+				signup.style.width=docWidth*.1 + "px";
+				
+				signup.onclick=function(){
+					handleDOM.remove("signup");
+					handleDOM.remove("login");
+					page.signup();
+				}
+				
+				//login div
+				handleDOM.create("login", "DIV", king);
+				login=document.getElementById("login");
+				
+				login.innerHTML="Login";
+				login.style.position = "absolute";
+				login.style.textAlign = "center";
+				login.style.border = "thick solid #0000FF";
+				login.style.left=docWidth*.45 + "px";
+				login.style.top=docHeight*.375 +"px";
+				login.style.width=docWidth*.1 + "px";
+				
+				login.onclick=function(){
+					handleDOM.remove("signup");
+					handleDOM.remove("login");
+					page.login();
+				}
+			},
+			
+		//===================sign up page============================
+			signup: function(){
+				var test = document.createElement("DIV");
+				king.appendChild(test);
+				test.innerHTML="Sign Up Page";
+			},
+			
+		//===================login page==============================
+			login: function(){
+				var test = document.createElement("DIV");
+				king.appendChild(test);
+				test.innerHTML="Login Page";
+			}
+		}
+		</script>
+    </body>
+</html>
