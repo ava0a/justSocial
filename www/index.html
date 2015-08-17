@@ -31,7 +31,7 @@
         <script>
 		//===================globals================================
 		var king = document.getElementById("king");
-		var docWidth= $(window).width();
+		var docWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
 		var docHeight= $(window).height();
 				
 		//================device ready==============================
