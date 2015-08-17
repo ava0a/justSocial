@@ -11,32 +11,27 @@
     <body>
 		<!-----------------remove default margins------------------>
 		<style type="text/css">
-			body *{
-				margin: 0;
-				padding: 0
-			}
-		</style>
-		<style type="text/css">
 			body {
 				margin: 0;
 				padding: 0
 			}
 		</style>
+		
 		<!-----------------loading page----------------------------->
         <div id="king">
-			<h1>Social</h1>
 			<div id="deviceready">
 				<p>Connecting To Device</p>
 			</div>
 		</div>
 		
+		<!------------------scripts--------------------------------->
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script>
 		//===================globals================================
 		var king = document.getElementById("king");
-		var docWidth= $(document).width();
-		var docHeight= $(document).height();
+		var docWidth= $(window).width();
+		var docHeight= $(window).height();
 				
 		//================device ready==============================
         app.initialize();
@@ -237,12 +232,12 @@
 							if(current<docWidth){
 								current +=slider;
 								if(current>.65*docWidth){
-									picDiv.style.left=.65*docWidth+'px';
+									picDiv.style.left=(1-picW)*docWidth+'px';
 								}
 								else{
 									picDiv.style.left=current+'px';
 								}
-								dashboard.style.left=(.35*docWidth)+current+'px';
+								dashboard.style.left=(picW*docWidth)+current+'px';
 								search.style.left=(0.9*docWidth)+current+'px';
 								feed.style.left=current+'px';
 								slideRight();
@@ -257,25 +252,26 @@
 					}
 					
 					//create profile picture
+					var picW=.25;
 					handleDOM.create("picDiv", "DIV", king);
 					var picDiv = document.getElementById("picDiv");
 					picDiv.style.position="absolute";
 					picDiv.style.left=0+'px';
 					picDiv.style.top=0+'px';
-					picDiv.style.width=.35*docWidth+'px';
-					picDiv.style.height=.35*docWidth+'px';
-					picDiv.style.border = "thin dotted #0000FF";
+					picDiv.style.width=picW*docWidth+'px';
+					picDiv.style.height=picW*docWidth+'px';
+					picDiv.style.backgroundColor = "red";
 					picDiv.onclick=function(){slideRight();};
 					
 					//create dashboard
 					handleDOM.create("dashboard", "DIV", king);
 					var dashboard = document.getElementById("dashboard");
 					dashboard.style.position="absolute";
-					dashboard.style.left=.35*docWidth+'px';
+					dashboard.style.left=picW*docWidth+'px';
 					dashboard.style.top=0+'px';
-					dashboard.style.width=.55*docWidth+'px';
-					dashboard.style.height=.35*docWidth+'px';
-					dashboard.style.border = "thin dotted #0000FF";
+					dashboard.style.width=(.9-picW)*docWidth+'px';
+					dashboard.style.height=picW*docWidth+'px';
+					dashboard.style.backgroundColor = "#0000FF";
 					
 					//create search icon
 					handleDOM.create("search", "DIV", king);
@@ -284,18 +280,18 @@
 					search.style.left=.9*docWidth+'px';
 					search.style.top=0+'px';
 					search.style.width=.1*docWidth+'px';
-					search.style.height=.35*docWidth+'px';
-					search.style.border = "thin dotted #0000FF";
+					search.style.height=picW*docWidth+'px';
+					search.style.backgroundColor = "yellow";
 					
 					//create feed
 					handleDOM.create("feed", "DIV", king);
 					var feed = document.getElementById("feed");
 					feed.style.position="absolute";
 					feed.style.left=0+'px';
-					feed.style.top=.35*docWidth+'px';
+					feed.style.top=picW*docWidth+'px';
 					feed.style.width=docWidth+'px';
-					feed.style.height=docHeight-(.35*docWidth)+'px';
-					feed.style.border = "thin dotted #0000FF";
+					feed.style.height=docHeight-(picW*docWidth)+'px';
+					feed.style.backgroundColor = "black";
 				
 				//re-verify login credentials
 			},
@@ -325,7 +321,11 @@
 				}
 				
 					//pull picture div
+				var picW=.35;
 				var picDiv=document.getElementById("picDiv");
+				picDiv.style.width=picW*docWidth+'px';
+				picDiv.style.height=picW*docWidth+'px';
+				picDiv.style.left=docWidth-(picW*docWidth)+'px';
 				picDiv.onclick=function(){slideLeft();};
 				
 					//create circles
