@@ -73,16 +73,76 @@
 			
 		//===================sign up page============================
 			signup: function(){
+				var validInput=false;
+			
 				handleDOM.create("signup", "FORM", king);
 				var signup=document.getElementById("signup");
-				signup.innerHTML="<br>ASU Email: <input type='text' id= 'email' /><br><br>Password: <input type='text' id='password' /><br><br><input type='button' value='Create Account' id='submitform' />"
-				var submit = document.getElementById("submitform");
+				
+				handleDOM.create("emailDIV", "DIV", signup);
+				var email=document.getElementById("emailDIV");
+				email.innerHTML="ASU E-Mail: <input id='email' type='text' />";
+				
+				console.log(validInput);
+				
+				handleDOM.create("passwordDIV", "DIV", signup);
+				var password=document.getElementById("passwordDIV");
+				password.innerHTML="Password: <input id='password' type='password' /><br>Confirm: <input id='password2' type='password' />";
+				
+				handleDOM.create("submit", "INPUT", signup);
+				var submit = document.getElementById("submit");
+				submit.type="button";
+				submit.value="Create Account";
 				submit.onclick=function(){
-					var  hr = new XMLHttpRequest();
-					var url= "http://strugglingdev-games.com/social.php";
+					if(document.getElementById("password").value===document.getElementById("password2").value){
+						validInput=true;
+					}
+					if(validInput){
+						validInput=false;
+						var hr = new XMLHttpRequest();
+						var url= "http://strugglingdev-games.com/signup.php";
+						var em = document.getElementById("email").value;
+						var pw = document.getElementById("password2").value;
+						var vars = "email="+em.toLowerCase()+"&password="+pw;
+						hr.open("POST", url, true);
+						hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+						hr.onreadystatechange = function(){
+							if(hr.readyState==4 && hr.status==200){
+								var return_data=hr.responseText;
+								submit.value = return_data;
+							}
+							else{
+								alert(hr.statusText);
+							}
+						}
+						hr.send(vars);
+						submit.value = "processing...";
+					}
+				}
+			},
+			
+		//===================login page==============================
+			login: function(){
+				handleDOM.create("login", "FORM", king);
+				var login=document.getElementById("login");
+				
+				handleDOM.create("emailDIV", "DIV", login);
+				var email=document.getElementById("emailDIV");
+				email.innerHTML="ASU E-Mail:<br><input id='email' type='text' />";
+				
+				handleDOM.create("passwordDIV", "DIV", login);
+				var password=document.getElementById("passwordDIV");
+				password.innerHTML="Password:<br><input id='password' type='password' />";
+			
+				handleDOM.create("submit", "INPUT", login);
+				var submit=document.getElementById("submit");
+				submit.type="button";
+				submit.value="Log In";
+				submit.onclick=function(){
+					var hr = new XMLHttpRequest();
+					var url= "http://strugglingdev-games.com/login.php";
 					var em = document.getElementById("email").value;
 					var pw = document.getElementById("password").value;
-					var vars = "email="+em+"&password="+pw;
+					var vars = "email="+em.toLowerCase()+"&password="+pw;
 					hr.open("POST", url, true);
 					hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 					hr.onreadystatechange = function(){
@@ -95,15 +155,9 @@
 						}
 					}
 					hr.send(vars);
-					submit.value = "processing...";
-				}
-			},
-			
-		//===================login page==============================
-			login: function(){
-				var test = document.createElement("DIV");
-				king.appendChild(test);
-				test.innerHTML="Login Page";
+					submit.value = "authenticating...";
+				};
+				
 			}
 		}
 		</script>
