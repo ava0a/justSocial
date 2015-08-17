@@ -80,7 +80,6 @@
 							var return_data=hr.responseText;
 						}
 						
-						console.log(return_data);
 						if(return_data=="1"){
 							submit.value = "Success!";
 							var temp = em;
@@ -90,10 +89,11 @@
 						}
 						else if(return_data=="2"){
 							submit.value = "Success!";
-							var temp = em;
+							var temp1 = em;
+							var temp2 = pw;
 							handleDOM.remove("signup");
 							handleDOM.remove("login");
-							page.authenticate(temp);
+							page.authenticate(temp1, temp2);
 						}
 						else if(return_data=="-1"){
 							//invalid password
@@ -196,7 +196,7 @@
 							if(hr.readyState==4 && hr.status==200){
 								var return_data=hr.responseText;
 								
-								if(return_data="1"){
+								if(return_data=="1"){
 									submit.value="Verified!";
 								}
 								else if(return_data=="2"){
@@ -212,9 +212,112 @@
 						submit.value = "verifying...";
 				}
 			},
+	
 		//==================main page==================================
-			main: function(email){
-				alert("Welcome to the main page. Currently under construction.");
+			main: function(em, pw){
+				//draw main screen
+					//slide function
+					var current=0;
+					var slider = docWidth*.07;
+					var slideRight = function(){
+						setTimeout(function(){
+							if(current<docWidth){
+								current +=slider;
+								if(current>.65*docWidth){
+									picDiv.style.left=.65*docWidth+'px';
+								}
+								else{
+									picDiv.style.left=current+'px';
+								}
+								dashboard.style.left=(.35*docWidth)+current+'px';
+								search.style.left=(0.9*docWidth)+current+'px';
+								feed.style.left=current+'px';
+								slideRight();
+							}
+							else if(current >= docWidth){
+								handleDOM.remove("dashboard");
+								handleDOM.remove("search");
+								handleDOM.remove("feed");
+								page.circle(em, pw);
+							}
+						}, 20);
+					}
+					
+					//create profile picture
+					handleDOM.create("picDiv", "DIV", king);
+					var picDiv = document.getElementById("picDiv");
+					picDiv.style.position="absolute";
+					picDiv.style.left=0+'px';
+					picDiv.style.top=0+'px';
+					picDiv.style.width=.35*docWidth+'px';
+					picDiv.style.height=.35*docWidth+'px';
+					picDiv.style.border = "thin dotted #0000FF";
+					picDiv.onclick=function(){slideRight();};
+					
+					//create dashboard
+					handleDOM.create("dashboard", "DIV", king);
+					var dashboard = document.getElementById("dashboard");
+					dashboard.style.position="absolute";
+					dashboard.style.left=.35*docWidth+'px';
+					dashboard.style.top=0+'px';
+					dashboard.style.width=.55*docWidth+'px';
+					dashboard.style.height=.35*docWidth+'px';
+					dashboard.style.border = "thin dotted #0000FF";
+					
+					//create search icon
+					handleDOM.create("search", "DIV", king);
+					var search = document.getElementById("search");
+					search.style.position="absolute";
+					search.style.left=.9*docWidth+'px';
+					search.style.top=0+'px';
+					search.style.width=.1*docWidth+'px';
+					search.style.height=.35*docWidth+'px';
+					search.style.border = "thin dotted #0000FF";
+					
+					//create feed
+					handleDOM.create("feed", "DIV", king);
+					var feed = document.getElementById("feed");
+					feed.style.position="absolute";
+					feed.style.left=0+'px';
+					feed.style.top=.35*docWidth+'px';
+					feed.style.width=docWidth+'px';
+					feed.style.height=docHeight-(.35*docWidth)+'px';
+					feed.style.border = "thin dotted #0000FF";
+				
+				//re-verify login credentials
+			},
+		
+		//==================circles page==============================
+			circle: function(em, pw){
+				//draw main screen
+					//slide function
+				var current=docWidth;
+				var slider = docWidth*.07;
+				var slideLeft = function(){
+					setTimeout(function(){
+						if(current>0){
+							current -=slider;
+							if(current<=0){
+								picDiv.style.left=0+'px';
+							}
+							else{
+								picDiv.style.left=current+'px';
+							}
+							slideLeft();
+						}
+						else if(current <= 0){
+							page.main(em, pw);
+						}
+					}, 20);
+				}
+				
+					//pull picture div
+				var picDiv=document.getElementById("picDiv");
+				picDiv.onclick=function(){slideLeft();};
+				
+					//create circles
+					
+					//create buttons
 			}
 		}
 		</script>
