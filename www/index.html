@@ -29,14 +29,14 @@
         app.initialize();
 		
 		var page={
-		//===================entry page=============================
-			entry: function(){
+		//===================login page=============================
+			login: function(){
 				
 				//signup div
 				handleDOM.create("signup", "DIV", king);
 				signup=document.getElementById("signup");
 				
-				signup.innerHTML="Sign Up";
+				signup.innerHTML="Sign Up Now";
 				signup.style.position = "absolute";
 				signup.style.textAlign = "center";
 				signup.style.border = "thick solid #0000FF";
@@ -52,10 +52,71 @@
 				}
 				
 				//login div
-				handleDOM.create("login", "DIV", king);
-				login=document.getElementById("login");
+				handleDOM.create("login", "FORM", king);
+				var login=document.getElementById("login");
 				
-				login.innerHTML="Login";
+				handleDOM.create("emailDIV", "DIV", login);
+				var email=document.getElementById("emailDIV");
+				email.innerHTML="ASU E-Mail:<br><input id='email' type='text' />";
+				
+				handleDOM.create("passwordDIV", "DIV", login);
+				var password=document.getElementById("passwordDIV");
+				password.innerHTML="Password:<br><input id='password' type='password' />";
+			
+				handleDOM.create("submit", "INPUT", login);
+				var submit=document.getElementById("submit");
+				submit.type="button";
+				submit.value="Log In";
+				submit.onclick=function(){
+					var hr = new XMLHttpRequest();
+					var url= "http://strugglingdev-games.com/login.php";
+					var em = document.getElementById("email").value;
+					var pw = document.getElementById("password").value;
+					var vars = "email="+em.toLowerCase()+"&password="+pw;
+					hr.open("POST", url, true);
+					hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+					hr.onreadystatechange = function(){
+						if(hr.readyState==4 && hr.status==200){
+							var return_data=hr.responseText;
+						}
+						
+						console.log(return_data);
+						if(return_data=="1"){
+							submit.value = "Success!";
+							var temp = em;
+							handleDOM.remove("signup");
+							handleDOM.remove("login");
+							page.main(temp);
+						}
+						else if(return_data=="2"){
+							submit.value = "Success!";
+							var temp = em;
+							handleDOM.remove("signup");
+							handleDOM.remove("login");
+							page.authenticate(temp);
+						}
+						else if(return_data=="-1"){
+							//invalid password
+							submit.value = "Re-Submit";
+						}
+						else if(return_data==-"-2"){
+							//email not found
+							submit.value = "Re-Submit";
+						}
+						else if(return_data=="-3"){
+							//network communication error
+							submit.value = "Re-Submit";
+						}
+						else{
+							//unkown error
+							submit.value = "Re-Submit";
+						}
+					}
+					hr.send(vars);
+					
+					submit.value = "authenticating...";
+				};
+				
 				login.style.position = "absolute";
 				login.style.textAlign = "center";
 				login.style.border = "thick solid #0000FF";
@@ -63,12 +124,6 @@
 				login.style.top=docHeight*.15 +"px";
 				login.style.width=docWidth*.5 + "px";
 				login.style.height=docHeight*.3 + "px";
-				
-				login.onclick=function(){
-					handleDOM.remove("signup");
-					handleDOM.remove("login");
-					page.login();
-				}
 			},
 			
 		//===================sign up page============================
@@ -110,54 +165,56 @@
 								var return_data=hr.responseText;
 								submit.value = return_data;
 							}
-							else{
-								alert(hr.statusText);
-							}
 						}
 						hr.send(vars);
 						submit.value = "processing...";
 					}
 				}
 			},
-			
-		//===================login page==============================
-			login: function(){
-				handleDOM.create("login", "FORM", king);
-				var login=document.getElementById("login");
+		
+		//==================validation page==========================
+			authenticate: function(email){
+				handleDOM.create("validate", "FORM", king);
+				var validate=document.getElementById("validate");
 				
-				handleDOM.create("emailDIV", "DIV", login);
-				var email=document.getElementById("emailDIV");
-				email.innerHTML="ASU E-Mail:<br><input id='email' type='text' />";
+				handleDOM.create("codeDIV", "DIV", validate);
+				var codeDIV=document.getElementById("codeDIV");
+				codeDIV.innerHTML="Enter Validation Code:<br><input id='code' type='text' />";
 				
-				handleDOM.create("passwordDIV", "DIV", login);
-				var password=document.getElementById("passwordDIV");
-				password.innerHTML="Password:<br><input id='password' type='password' />";
-			
-				handleDOM.create("submit", "INPUT", login);
+				handleDOM.create("submit", "INPUT", validate);
 				var submit=document.getElementById("submit");
 				submit.type="button";
-				submit.value="Log In";
+				submit.value="submit";
 				submit.onclick=function(){
-					var hr = new XMLHttpRequest();
-					var url= "http://strugglingdev-games.com/login.php";
-					var em = document.getElementById("email").value;
-					var pw = document.getElementById("password").value;
-					var vars = "email="+em.toLowerCase()+"&password="+pw;
-					hr.open("POST", url, true);
-					hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-					hr.onreadystatechange = function(){
-						if(hr.readyState==4 && hr.status==200){
-							var return_data=hr.responseText;
-							submit.value = return_data;
+						var hr = new XMLHttpRequest();
+						var url= "http://strugglingdev-games.com/authenticate.php";
+						var code = document.getElementById("code").value;
+						var vars = "code="+code+"&email="+email;
+						hr.open("POST", url, true);
+						hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+						hr.onreadystatechange = function(){
+							if(hr.readyState==4 && hr.status==200){
+								var return_data=hr.responseText;
+								
+								if(return_data="1"){
+									submit.value="Verified!";
+								}
+								else if(return_data=="2"){
+									submit.value="Re-Submit";
+								}
+								else{
+									alert("ERROR");
+									submit.value="ERROR";
+								}
+							}
 						}
-						else{
-							alert(hr.statusText);
-						}
-					}
-					hr.send(vars);
-					submit.value = "authenticating...";
-				};
-				
+						hr.send(vars);
+						submit.value = "verifying...";
+				}
+			},
+		//==================main page==================================
+			main: function(email){
+				alert("Welcome to the main page. Currently under construction.");
 			}
 		}
 		</script>

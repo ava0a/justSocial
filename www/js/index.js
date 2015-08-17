@@ -31,7 +31,7 @@ var app = {
         console.log('Received Event: ' + id);
 		
 		//remove deviceready div
-		setTimeout(function(){handleDOM.remove("deviceready"); page.entry();}, 500);
+		setTimeout(function(){handleDOM.remove("deviceready"); page.login();}, 500);
 		
     }
 };
