@@ -12,9 +12,15 @@
     <body bgcolor="black">
 		<!-----------------remove default margins------------------>
 		<style type="text/css">
+		
 			body {
 				margin: 0;
-				padding: 0
+				padding: 0;
+			}
+		</style>
+		<style>
+			* {
+				max-width: 100%;
 			}
 		</style>
 		
@@ -32,7 +38,7 @@
 		//===================globals================================
 		var king = document.getElementById("king");
 		var docWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-		var docHeight= $(window).height();
+		var docHeight= (window.innerHeight > 0) ? window.innerHeight : screen.height;
 		var slider = docWidth*.07;
 				
 		//================device ready==============================
