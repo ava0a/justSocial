@@ -9,7 +9,7 @@
         <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 		<title>Social</title>
     </head>
-    <body>
+    <body bgcolor="black">
 		<!-----------------remove default margins------------------>
 		<style type="text/css">
 			body {
@@ -32,7 +32,8 @@
 		//===================globals================================
 		var king = document.getElementById("king");
 		var docWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-		var docHeight= $(window).height();
+		var docHeight= (window.innerHeight > 0) ? window.innerHeight : screen.height;
+		var slider = docWidth*.07;
 				
 		//================device ready==============================
         app.initialize();
@@ -91,18 +92,19 @@
 						
 						if(return_data=="1"){
 							submit.value = "Success!";
-							var temp = em;
-							handleDOM.remove("signup");
-							handleDOM.remove("login");
-							page.main(temp);
+							setTimeout(function(){
+								handleDOM.remove("signup");
+								handleDOM.remove("login");
+								page.main(em, pw);
+							}, 500);
 						}
 						else if(return_data=="2"){
 							submit.value = "Success!";
-							var temp1 = em;
-							var temp2 = pw;
-							handleDOM.remove("signup");
-							handleDOM.remove("login");
-							page.authenticate(temp1, temp2);
+							setTimeout(function(){
+								handleDOM.remove("signup");
+								handleDOM.remove("login");
+								page.authenticate(em, pw);
+							}, 500);
 						}
 						else if(return_data=="-1"){
 							//invalid password
@@ -142,14 +144,12 @@
 				handleDOM.create("signup", "FORM", king);
 				var signup=document.getElementById("signup");
 				
-				handleDOM.create("emailDIV", "DIV", signup);
-				var email=document.getElementById("emailDIV");
+				handleDOM.create("emailDiv", "DIV", signup);
+				var email=document.getElementById("emailDiv");
 				email.innerHTML="ASU E-Mail: <input id='email' type='text' />";
 				
-				console.log(validInput);
-				
-				handleDOM.create("passwordDIV", "DIV", signup);
-				var password=document.getElementById("passwordDIV");
+				handleDOM.create("passwordDiv", "DIV", signup);
+				var password=document.getElementById("passwordDiv");
 				password.innerHTML="Password: <input id='password' type='password' /><br>Confirm: <input id='password2' type='password' />";
 				
 				handleDOM.create("submit", "INPUT", signup);
@@ -173,6 +173,15 @@
 							if(hr.readyState==4 && hr.status==200){
 								var return_data=hr.responseText;
 								submit.value = return_data;
+								if(return_data=="Thanks!"){
+									setTimeout(function(){
+										handleDOM.remove("submit");
+										handleDOM.remove("passwordDiv");
+										handleDOM.remove("emailDiv");
+										handleDOM.remove("signup");
+										page.authenticate(em, pw);
+									}, 500);
+								}
 							}
 						}
 						hr.send(vars);
@@ -182,13 +191,13 @@
 			},
 		
 		//==================validation page==========================
-			authenticate: function(email){
+			authenticate: function(em, pw){
 				handleDOM.create("validate", "FORM", king);
 				var validate=document.getElementById("validate");
 				
-				handleDOM.create("codeDIV", "DIV", validate);
-				var codeDIV=document.getElementById("codeDIV");
-				codeDIV.innerHTML="Enter Validation Code:<br><input id='code' type='text' />";
+				handleDOM.create("codeDiv", "DIV", validate);
+				var codeDIV=document.getElementById("codeDiv");
+				codeDiv.innerHTML="Enter Validation Code:<br><input id='code' type='text' />";
 				
 				handleDOM.create("submit", "INPUT", validate);
 				var submit=document.getElementById("submit");
@@ -198,7 +207,7 @@
 						var hr = new XMLHttpRequest();
 						var url= "http://strugglingdev-games.com/authenticate.php";
 						var code = document.getElementById("code").value;
-						var vars = "code="+code+"&email="+email;
+						var vars = "code="+code+"&email="+em;
 						hr.open("POST", url, true);
 						hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 						hr.onreadystatechange = function(){
@@ -207,6 +216,12 @@
 								
 								if(return_data=="1"){
 									submit.value="Verified!";
+									setTimeout(function(){
+										handleDOM.remove("submit");
+										handleDOM.remove("codeDiv");
+										handleDOM.remove("validate");
+										page.main(em, pw)
+									},500);
 								}
 								else if(return_data=="2"){
 									submit.value="Re-Submit";
@@ -222,28 +237,30 @@
 				}
 			},
 	
-		//==================main page==================================
+		//==================main page================================
 			main: function(em, pw){
 				//draw main screen
 					//slide function
-					var current=0;
-					var slider = docWidth*.07;
+					var currentR=0;
+					var currentL=docWidth;
+					
 					var slideRight = function(){
 						setTimeout(function(){
-							if(current<docWidth){
-								current +=slider;
-								if(current>.65*docWidth){
-									picDiv.style.left=(1-picW)*docWidth+'px';
+							if(currentR<docWidth){
+								currentR +=slider;
+								if(currentR>.65*docWidth){
+									profileImg.style.left=(1-picW)*docWidth+'px';
 								}
 								else{
-									picDiv.style.left=current+'px';
+									profileImg.style.left=currentR+'px';
 								}
-								dashboard.style.left=(picW*docWidth)+current+'px';
-								search.style.left=(0.9*docWidth)+current+'px';
-								feed.style.left=current+'px';
+								dashboard.style.left=(picW*docWidth)+currentR+'px';
+								search.style.left=(0.9*docWidth)+currentR+'px';
+								feed.style.left=currentR+'px';
 								slideRight();
 							}
-							else if(current >= docWidth){
+							else if(currentR >= docWidth){
+								handleDOM.remove("title");
 								handleDOM.remove("dashboard");
 								handleDOM.remove("search");
 								handleDOM.remove("feed");
@@ -252,17 +269,45 @@
 						}, 20);
 					}
 					
+					var slideLeft = function(){
+						setTimeout(function(){
+							if(currentL>0){
+								currentL -=slider;
+								if(docWidth-currentL<(.9*docWidth)){
+									search.style.width=((docWidth-currentL)+(.1*docWidth))+'px';
+									search.style.left=(currentL-(docWidth-(docWidth*.9)))+'px';
+								}
+								else{
+									search.style.width=docWidth +'px';
+									search.style.left=0+'px';
+								}
+								profileImg.style.left=(currentL-docWidth)+'px';
+								dashboard.style.left=(currentL-(docWidth-(docWidth*picW)))+'px';
+								feed.style.left=(currentL-docWidth)+'px';
+								slideLeft();
+							}
+							else if(currentL <= 0){
+								handleDOM.remove("profileImg");
+								handleDOM.remove("title");
+								handleDOM.remove("dashboard");
+								handleDOM.remove("searchIcon");
+								handleDOM.remove("feed");
+								page.search(em, pw);
+							}
+						}, 20);
+					}
+					
 					//create profile picture
-					var picW=.25;
-					handleDOM.create("picDiv", "DIV", king);
-					var picDiv = document.getElementById("picDiv");
-					picDiv.style.position="absolute";
-					picDiv.style.left=0+'px';
-					picDiv.style.top=0+'px';
-					picDiv.style.width=picW*docWidth+'px';
-					picDiv.style.height=picW*docWidth+'px';
-					picDiv.style.backgroundColor = "red";
-					picDiv.onclick=function(){slideRight();};
+					var picW=.225;
+					handleDOM.create("profileImg", "IMG", king);
+					var profileImg = document.getElementById("profileImg");
+					profileImg.src="img/profile.jpg"
+					profileImg.style.position="absolute";
+					profileImg.style.left=0+'px';
+					profileImg.style.top=0+'px';
+					profileImg.style.width=picW*docWidth+'px';
+					profileImg.style.height=picW*docWidth+'px';
+					profileImg.onclick=function(){slideRight();};
 					
 					//create dashboard
 					handleDOM.create("dashboard", "DIV", king);
@@ -272,9 +317,18 @@
 					dashboard.style.top=0+'px';
 					dashboard.style.width=(.9-picW)*docWidth+'px';
 					dashboard.style.height=picW*docWidth+'px';
-					dashboard.style.backgroundColor = "#0000FF";
+					dashboard.style.backgroundColor = "#990033";
+						//title
+						handleDOM.create("title", "IMG", dashboard);
+						var title=document.getElementById("title");
+						title.src="img/title.png";
+						title.style.position="relative";
+						title.style.width=(.9-picW)*docWidth-(picW*.4*docWidth)+'px';
+						title.style.left=picW*.2*docWidth+'px';
+						title.style.height=(picW*.8*docWidth)/2+'px';
+						title.style.top=picW*.05*docWidth+'px';
 					
-					//create search icon
+					//create search div
 					handleDOM.create("search", "DIV", king);
 					var search = document.getElementById("search");
 					search.style.position="absolute";
@@ -282,7 +336,16 @@
 					search.style.top=0+'px';
 					search.style.width=.1*docWidth+'px';
 					search.style.height=picW*docWidth+'px';
-					search.style.backgroundColor = "yellow";
+					search.style.backgroundColor = "#990033";
+					search.onclick=function(){slideLeft()};
+						//search icon
+						handleDOM.create("searchIcon", "IMG", search);
+						var searchIcon=document.getElementById("searchIcon");
+						searchIcon.src="img/search.png";
+						searchIcon.style.position="relative";
+						searchIcon.style.width=.1*docWidth+'px';
+						searchIcon.style.height=.15*docWidth+'px';
+						searchIcon.style.top=((picW*docWidth)-(.1*docWidth))/2+'px';
 					
 					//create feed
 					handleDOM.create("feed", "DIV", king);
@@ -297,41 +360,131 @@
 				//re-verify login credentials
 			},
 		
-		//==================circles page==============================
+		//==================circles page=============================
 			circle: function(em, pw){
 				//draw main screen
 					//slide function
 				var current=docWidth;
-				var slider = docWidth*.07;
 				var slideLeft = function(){
 					setTimeout(function(){
 						if(current>0){
 							current -=slider;
-							if(current<=0){
-								picDiv.style.left=0+'px';
+							if(current<=picW*docWidth){
+								profileImg.style.left=0+'px';
 							}
 							else{
-								picDiv.style.left=current+'px';
+								profileImg.style.left=(current-(docWidth*picW))+'px';
 							}
+							circles.style.left=(current-docWidth)+'px';
+							buttons.style.left=(current-(docWidth*picW))+'px';
 							slideLeft();
 						}
 						else if(current <= 0){
+							handleDOM.remove("settings");
+							handleDOM.remove("newCircle");
+							handleDOM.remove("newPic");
+							handleDOM.remove("buttons");
+							handleDOM.remove("circles");
 							page.main(em, pw);
 						}
 					}, 20);
 				}
 				
-					//pull picture div
+					//create picture
 				var picW=.35;
-				var picDiv=document.getElementById("picDiv");
-				picDiv.style.width=picW*docWidth+'px';
-				picDiv.style.height=picW*docWidth+'px';
-				picDiv.style.left=docWidth-(picW*docWidth)+'px';
-				picDiv.onclick=function(){slideLeft();};
+				handleDOM.create("profileImg", "IMG", king);
+				var profileImg=document.getElementById("profileImg");
+				profileImg.style.width=picW*docWidth+'px';
+				profileImg.style.height=picW*docWidth+'px';
+				profileImg.style.left=docWidth-(picW*docWidth)+'px';
+				profileImg.onclick=function(){slideLeft();};
 				
 					//create circles
+				handleDOM.create("circles", "DIV", king);
+				var circles = document.getElementById("circles");
+				circles.style.position="absolute";
+				circles.style.width=docWidth-(picW*docWidth)+'px';
+				circles.style.height=docHeight+'px';
+				circles.style.left=0+'px';
+				circles.style.top=0+'px';
+				circles.style.backgroundColor="white";
 					
 					//create buttons
+				handleDOM.create("buttons", "DIV", king);
+				var buttons = document.getElementById("buttons");
+				buttons.style.position="absolute";
+				buttons.style.width=(picW*docWidth)+'px';
+				buttons.style.height=docHeight-(picW*docWidth)+'px';
+				buttons.style.left=docWidth-(docWidth*picW)+'px';
+				buttons.style.top=(docWidth*picW)+'px';
+				buttons.style.backgroundColor="black";
+						//settings button
+						handleDOM.create("settings", "IMG", buttons);
+						var settings=document.getElementById("settings");
+						settings.src="img/settings.png";
+						settings.style.position="relative";
+						settings.style.left=picW*docWidth*.1+'px';
+						settings.style.top=(docHeight-(picW*docWidth))*.05+'px';
+						settings.style.width=(picW*docWidth*.8)+'px';
+						settings.style.height=(docHeight-(picW*docWidth))*.8/3+'px';
+						
+						//create circle button
+						handleDOM.create("newCircle", "IMG", buttons);
+						var newCircle=document.getElementById("newCircle");
+						newCircle.style.position="relative";
+						newCircle.style.left=picW*docWidth*.1+'px';
+						newCircle.style.top=(docHeight-(picW*docWidth))*(.1+(.8/3))+'px';
+						newCircle.style.width=(picW*docWidth*.8)+'px';
+						newCircle.style.height=(docHeight-(picW*docWidth))*.8/3+'px';
+
+						//change profile picture button
+						handleDOM.create("newPic", "IMG", buttons);
+						var newPic=document.getElementById("newPic");
+						newPic.style.position="relative";
+						newPic.style.left=picW*docWidth*.1+'px';
+						newPic.style.top=(docHeight-(picW*docWidth))*(.15+(2*(.8/3)))+'px';
+						newPic.style.width=(picW*docWidth*.8)+'px';
+						newPic.style.height=(docHeight-(picW*docWidth))*.8/3+'px';
+						
+			},
+		
+		//===================search page=============================
+			search: function(em, pw){
+				//slide function
+				var picW=.25;
+				var currentR=0;
+				var slideRight2 = function(){
+						setTimeout(function(){
+							if(currentR<docWidth){
+								currentR +=slider;
+								if(currentR>.9*docWidth){
+									search.style.left=.9*docWidth+'px';
+									search.style.width=.1*docWidth+'px';
+								}
+								else{
+									search.style.left=currentR+'px';
+									search.style.width=docWidth-currentR+'px';
+								}
+								slideRight2();
+							}
+							else if(currentR >= docWidth){
+								handleDOM.remove("back");
+								page.main(em, pw);
+							}
+						}, 20);
+					}
+					
+				//pull up search div and create for back button
+				var search=document.getElementById("search");
+				handleDOM.create("back", "IMG", search)
+				var back=document.getElementById("back");
+				back.src="img/back.png";
+				back.style.position="relative";
+				back.style.width=.075*docWidth+'px';
+				back.style.height=.075*docWidth+'px';
+				back.style.left=.02*docWidth+'px';
+				back.style.top=((picW*docWidth)-(.075*docWidth))*2/5+'px';
+				back.onclick=function(){slideRight2()};
 			}
 		}
 		</script>

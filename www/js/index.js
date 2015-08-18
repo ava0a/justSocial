@@ -38,9 +38,11 @@ var app = {
 
 var handleDOM ={
 	create: function(id, element, parent){
-		var temp = document.createElement(element);
-		temp.id=id;
-		parent.appendChild(temp);
+		if(!document.getElementById(id)){
+			var temp = document.createElement(element);
+			temp.id=id;
+			parent.appendChild(temp);
+		}
 	},
 	remove: function(id){
 		var element = document.getElementById(id);
