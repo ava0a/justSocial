@@ -40,13 +40,18 @@
 		var docWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
 		var docHeight= (window.innerHeight > 0) ? window.innerHeight : screen.height;
 		var slider = docWidth*.07;
-				
+		
+		$(window).bind('resize', function () {
+			console.log("triggered");
+			docWidth = $('[data-role="page"]').first().width();
+		});
 		//================device ready==============================
         app.initialize();
 		
 		var page={
 		//===================login page=============================
 			login: function(){
+				$(window).trigger('resize');
 				
 				//signup div
 				handleDOM.create("signup", "DIV", king);
