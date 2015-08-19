@@ -268,8 +268,9 @@
 							else if(currentR >= docWidth){
 								handleDOM.remove("title");
 								handleDOM.remove("dashboard");
-								handleDOM.remove("search");
+								
 								handleDOM.remove("feed");
+								
 								page.circle(em, pw);
 							}
 						}, 20);
@@ -294,10 +295,14 @@
 							}
 							else if(currentL <= 0){
 								handleDOM.remove("profileImg");
+								
 								handleDOM.remove("title");
 								handleDOM.remove("dashboard");
+								
 								handleDOM.remove("searchIcon");
+								
 								handleDOM.remove("feed");
+								
 								page.search(em, pw);
 							}
 						}, 20);
@@ -343,15 +348,16 @@
 					search.style.width=.1*docWidth+'px';
 					search.style.height=picW*docWidth+'px';
 					search.style.backgroundColor = "#990033";
-					search.onclick=function(){slideLeft()};
 						//search icon
 						handleDOM.create("searchIcon", "IMG", search);
 						var searchIcon=document.getElementById("searchIcon");
 						searchIcon.src="img/search.png";
 						searchIcon.style.position="relative";
 						searchIcon.style.width=.1*docWidth+'px';
-						searchIcon.style.height=.15*docWidth+'px';
+						searchIcon.style.height=(picW-.1)*docWidth+'px';
 						searchIcon.style.top=((picW*docWidth)-(.1*docWidth))/2+'px';
+						searchIcon.style.left=0+'px';
+						searchIcon.onclick=function(){slideLeft()};
 					
 					//create feed
 					handleDOM.create("feed", "DIV", king);
@@ -381,7 +387,9 @@
 							else{
 								profileImg.style.left=(current-(docWidth*picW))+'px';
 							}
-							circles.style.left=(current-docWidth)+'px';
+							banner.style.left=(current-(docWidth*.9))+'px';
+							search.style.left=(current-docWidth)+'px';
+							circles.style.left=(current-(docWidth))+'px';
 							buttons.style.left=(current-(docWidth*picW))+'px';
 							slideLeft();
 						}
@@ -389,9 +397,28 @@
 							handleDOM.remove("settings");
 							handleDOM.remove("newCircle");
 							handleDOM.remove("newPic");
+							handleDOM.remove("help");
 							handleDOM.remove("buttons");
+							
+							handleDOM.remove("banner");
+							
 							handleDOM.remove("circles");
 							page.main(em, pw);
+						}
+					}, 20);
+				}
+				var slideRight3 = function(){
+					setTimeout(function(){
+						if(current>=docWidth+(docWidth*picW)){
+							handleDOM.remove("searchIcon");
+							search.style.width=docWidth+'px';
+							page.search(em, pw);
+						}
+						else{
+							current+=slider/2;
+							search.style.left=0+'px';
+							search.style.width=current-(picW*docWidth)+'px';
+							slideRight3();
 						}
 					}, 20);
 				}
@@ -400,6 +427,7 @@
 				var picW=.35;
 				handleDOM.create("profileImg", "IMG", king);
 				var profileImg=document.getElementById("profileImg");
+				profileImg.style.position="fixed";
 				profileImg.style.width=picW*docWidth+'px';
 				profileImg.style.height=picW*docWidth+'px';
 				profileImg.style.left=docWidth-(picW*docWidth)+'px';
@@ -409,55 +437,152 @@
 				handleDOM.create("circles", "DIV", king);
 				var circles = document.getElementById("circles");
 				circles.style.position="absolute";
-				circles.style.width=docWidth-(picW*docWidth)+'px';
-				circles.style.height=docHeight+'px';
+				circles.style.width=docWidth-(picW*docWidth)-5+'px';
+				circles.style.minHeight=docHeight-(docWidth*picW/2)+'px';
 				circles.style.left=0+'px';
-				circles.style.top=0+'px';
-				circles.style.backgroundColor="white";
+				circles.style.top=docWidth*picW/2+'px';
+				circles.style.borderBottom="5px solid #990033";
+				circles.style.borderRight="5px solid #990033";
+				circles.style.color="#40FF00";
+				
+				//temporary========================================
+				circles.innerHTML="scroll down to test anchoring<br><br><br>....<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>Nick is gay.";
+				//temporary========================================
+				
+					//header banner
+				handleDOM.create("banner", "DIV", king);
+				var banner = document.getElementById("banner");
+				banner.style.position="fixed";
+				banner.style.width=docWidth*.9-(picW*docWidth)+'px';
+				banner.style.height=docWidth*picW/2+'px';
+				banner.style.left=docWidth*.1+'px';
+				banner.style.top=0+'px';
+				banner.style.backgroundColor="#990033";
+				
+					//delete and recreate search divs
+				handleDOM.remove("searchIcon");
+				handleDOM.remove("search");
+				
+				handleDOM.create("search", "DIV", king)
+				var search = document.getElementById("search");
+				search.style.position="fixed";
+				search.style.height=docWidth*picW/2+'px';
+				search.style.width=docWidth*.1+'px';
+				search.style.top=0+'px';
+				search.style.left=0+'px';
+				search.style.backgroundColor="#990033";
+						//pull up search img
+						handleDOM.create("searchIcon", "IMG", search);
+						var searchIcon=document.getElementById("searchIcon");
+						searchIcon.src="img/search.png";
+						searchIcon.style.position="relative";
+						searchIcon.style.width=.08*docWidth+'px';
+						searchIcon.style.height=((picW/2)-.1)*docWidth +'px';
+						searchIcon.style.left=.01*docWidth+'px';
+						searchIcon.style.top=((docWidth*picW/2)-((picW/2)-.1)*docWidth)/2 +'px';
+						searchIcon.onclick=function(){
+							handleDOM.remove("banner");
+							
+							handleDOM.remove("profileImg");
+							
+							handleDOM.remove("newCircle");
+							handleDOM.remove("settings");
+							handleDOM.remove("newPic");
+							handleDOM.remove("help");
+							handleDOM.remove("buttons");
+							
+							handleDOM.remove("circles");
+							
+							search.style.position="absolute";
+							slideRight3();
+						};
 					
 					//create buttons
 				handleDOM.create("buttons", "DIV", king);
 				var buttons = document.getElementById("buttons");
-				buttons.style.position="absolute";
+				buttons.style.position="fixed";
 				buttons.style.width=(picW*docWidth)+'px';
 				buttons.style.height=docHeight-(picW*docWidth)+'px';
 				buttons.style.left=docWidth-(docWidth*picW)+'px';
 				buttons.style.top=(docWidth*picW)+'px';
 				buttons.style.backgroundColor="black";
-						//settings button
-						handleDOM.create("settings", "IMG", buttons);
-						var settings=document.getElementById("settings");
-						settings.src="img/settings.png";
-						settings.style.position="relative";
-						settings.style.left=picW*docWidth*.1+'px';
-						settings.style.top=(docHeight-(picW*docWidth))*.05+'px';
-						settings.style.width=(picW*docWidth*.8)+'px';
-						settings.style.height=(docHeight-(picW*docWidth))*.8/3+'px';
 						
 						//create circle button
 						handleDOM.create("newCircle", "IMG", buttons);
 						var newCircle=document.getElementById("newCircle");
-						newCircle.style.position="relative";
-						newCircle.style.left=picW*docWidth*.1+'px';
-						newCircle.style.top=(docHeight-(picW*docWidth))*(.1+(.8/3))+'px';
-						newCircle.style.width=(picW*docWidth*.8)+'px';
-						newCircle.style.height=(docHeight-(picW*docWidth))*.8/3+'px';
-
+						newCircle.src="img/newCircle.png";
+						newCircle.style.position="absolute";
+						
+						//settings button
+						handleDOM.create("settings", "IMG", buttons);
+						var settings=document.getElementById("settings");
+						settings.src="img/settings.png";
+						settings.style.position="absolute";
+						
 						//change profile picture button
 						handleDOM.create("newPic", "IMG", buttons);
 						var newPic=document.getElementById("newPic");
-						newPic.style.position="relative";
-						newPic.style.left=picW*docWidth*.1+'px';
-						newPic.style.top=(docHeight-(picW*docWidth))*(.15+(2*(.8/3)))+'px';
-						newPic.style.width=(picW*docWidth*.8)+'px';
-						newPic.style.height=(docHeight-(picW*docWidth))*.8/3+'px';
+						newPic.src="img/newPic.png";
+						newPic.style.position="absolute";
+						
+						//help button
+						handleDOM.create("help", "IMG", buttons);
+						var help=document.getElementById("help");
+						help.src="img/help.png";
+						help.style.position="absolute";
+						
+						//set button divs dimensions and coordinates based upon screen ratio
+						if((docHeight-(docWidth*picW))/5<=docWidth*picW*.66){
+							newCircle.style.left=((picW*docWidth)-((docHeight-(docWidth*picW))/5))/2+'px';
+							newCircle.style.top=(docHeight-(picW*docWidth))*.04+'px';
+							newCircle.style.width=(docHeight-(docWidth*picW))/5+'px';
+							newCircle.style.height=(docHeight-(docWidth*picW))/5+'px';
+						
+							settings.style.left=((picW*docWidth)-((docHeight-(docWidth*picW))/5))/2+'px';
+							settings.style.top=(docHeight-(picW*docWidth))*.08+(docHeight-(docWidth*picW))/5+'px';
+							settings.style.width=(docHeight-(docWidth*picW))/5+'px';
+							settings.style.height=(docHeight-(docWidth*picW))/5+'px';
+
+							newPic.style.left=((picW*docWidth)-((docHeight-(docWidth*picW))/5))/2+'px';
+							newPic.style.top=(docHeight-(picW*docWidth))*.12+(docHeight-(docWidth*picW))*2/5+'px';
+							newPic.style.width=(docHeight-(docWidth*picW))/5+'px';
+							newPic.style.height=(docHeight-(docWidth*picW))/5+'px';
+						
+							help.style.left=((picW*docWidth)-((docHeight-(docWidth*picW))/5))/2+'px';
+							help.style.top=(docHeight-(picW*docWidth))*.16+(docHeight-(docWidth*picW))*3/5+'px';
+							help.style.width=(docHeight-(docWidth*picW))/5+'px';
+							help.style.height=(docHeight-(docWidth*picW))/5+'px';
+						}
+						else{
+							newCircle.style.left=docWidth*picW*.16+'px';
+							newCircle.style.top=((docHeight-(docWidth*picW))-(docWidth*picW*.66)*4)/5+'px';
+							newCircle.style.width=docWidth*picW*.66+'px';
+							newCircle.style.height=docWidth*picW*.66+'px';
+						
+							settings.style.left=docWidth*picW*.16+'px';
+							settings.style.top=((docHeight-(docWidth*picW))-(docWidth*picW*.66)*4)*2/5+(docWidth*picW*.66)+'px';
+							settings.style.width=docWidth*picW*.66+'px';
+							settings.style.height=docWidth*picW*.66+'px';
+
+							newPic.style.left=docWidth*picW*.16+'px';
+							newPic.style.top=((docHeight-(docWidth*picW))-(docWidth*picW*.66)*4)*3/5+(docWidth*picW*.66*2)+'px';
+							newPic.style.width=docWidth*picW*.66+'px';
+							newPic.style.height=docWidth*picW*.66+'px';
+						
+							help.style.left=docWidth*picW*.16+'px';
+							help.style.top=((docHeight-(docWidth*picW))-(docWidth*picW*.66)*4)*4/5+(docWidth*picW*.66*3)+'px';
+							help.style.width=docWidth*picW*.66+'px';
+							help.style.height=docWidth*picW*.66+'px';
+						
+						}
+			
 						
 			},
 		
 		//===================search page=============================
 			search: function(em, pw){
 				//slide function
-				var picW=.25;
+				var picW=.225;
 				var currentR=0;
 				var slideRight2 = function(){
 						setTimeout(function(){
@@ -482,15 +607,16 @@
 					
 				//pull up search div and create for back button
 				var search=document.getElementById("search");
-				handleDOM.create("back", "IMG", search)
-				var back=document.getElementById("back");
-				back.src="img/back.png";
-				back.style.position="relative";
-				back.style.width=.075*docWidth+'px';
-				back.style.height=.075*docWidth+'px';
-				back.style.left=.02*docWidth+'px';
-				back.style.top=((picW*docWidth)-(.075*docWidth))*2/5+'px';
-				back.onclick=function(){slideRight2()};
+				search.style.height=picW*docWidth+'px';
+					handleDOM.create("back", "IMG", search)
+					var back=document.getElementById("back");
+					back.src="img/back.png";
+					back.style.position="relative";
+					back.style.width=.075*docWidth+'px';
+					back.style.height=.075*docWidth+'px';
+					back.style.left=.02*docWidth+'px';
+					back.style.top=((picW*docWidth)-(.075*docWidth))*2/5+'px';
+					back.onclick=function(){slideRight2()};
 			}
 		}
 		</script>
