@@ -493,9 +493,13 @@
 					searchCircles.style.fontFamily="helvetica, serif";
 					searchCircles.style.verticalAlign="middle";
 					
-					//delete and recreate search divs
-				handleDOM.remove("searchIcon");
-				handleDOM.remove("search");
+					//delete and recreate search div
+				if(document.getElementById("searchIcon")){
+					handleDOM.remove("searchIcon");
+				}
+				if(document.getElementById("search")){
+					handleDOM.remove("search");
+				}
 				
 				handleDOM.create("search", "DIV", king)
 				var search = document.getElementById("search");
@@ -516,6 +520,7 @@
 						searchIcon.style.left=.01*docWidth+'px';
 						searchIcon.style.top=((docWidth*picW/2)-((picW/2)-.1)*docWidth)/2 +'px';
 						searchIcon.onclick=function(){
+							handleDOM.remove("searchCircles");
 							handleDOM.remove("banner");
 							
 							handleDOM.remove("profileImg");
@@ -526,6 +531,7 @@
 							handleDOM.remove("help");
 							handleDOM.remove("buttons");
 							
+			//-----------------//remove each individual circle as well//-------------//
 							handleDOM.remove("circles");
 							
 							search.style.position="absolute";
@@ -547,24 +553,96 @@
 						var newCircle=document.getElementById("newCircle");
 						newCircle.src="img/newCircle.png";
 						newCircle.style.position="absolute";
+						newCircle.onclick=function(){
+							handleDOM.remove("searchCircles");
+							handleDOM.remove("banner");
+							
+							handleDOM.remove("profileImg");
+							
+							handleDOM.remove("newCircle");
+							handleDOM.remove("settings");
+							handleDOM.remove("newPic");
+							handleDOM.remove("help");
+							handleDOM.remove("buttons");
+							
+							handleDOM.remove("circles");
+							
+							handleDOM.remove("searchIcon");
+							handleDOM.remove("search");
+							page.newCircle(em, pw);
+						};
 						
 						//settings button
 						handleDOM.create("settings", "IMG", buttons);
 						var settings=document.getElementById("settings");
 						settings.src="img/settings.png";
 						settings.style.position="absolute";
+						settings.onclick=function(){
+							handleDOM.remove("searchCircles");
+							handleDOM.remove("banner");
+							
+							handleDOM.remove("profileImg");
+							
+							handleDOM.remove("newCircle");
+							handleDOM.remove("settings");
+							handleDOM.remove("newPic");
+							handleDOM.remove("help");
+							handleDOM.remove("buttons");
+							
+							handleDOM.remove("circles");
+							
+							handleDOM.remove("searchIcon");
+							handleDOM.remove("search");
+							page.settings(em, pw);
+						};
 						
 						//change profile picture button
 						handleDOM.create("newPic", "IMG", buttons);
 						var newPic=document.getElementById("newPic");
 						newPic.src="img/newPic.png";
 						newPic.style.position="absolute";
+						newPic.onclick=function(){
+							handleDOM.remove("searchCircles");
+							handleDOM.remove("banner");
+							
+							handleDOM.remove("profileImg");
+							
+							handleDOM.remove("newCircle");
+							handleDOM.remove("settings");
+							handleDOM.remove("newPic");
+							handleDOM.remove("help");
+							handleDOM.remove("buttons");
+							
+							handleDOM.remove("circles");
+							
+							handleDOM.remove("searchIcon");
+							handleDOM.remove("search");
+							page.newPic(em, pw);
+						};
 						
 						//help button
 						handleDOM.create("help", "IMG", buttons);
 						var help=document.getElementById("help");
 						help.src="img/help.png";
 						help.style.position="absolute";
+						help.onclick=function(){
+							handleDOM.remove("searchCircles");
+							handleDOM.remove("banner");
+							
+							handleDOM.remove("profileImg");
+							
+							handleDOM.remove("newCircle");
+							handleDOM.remove("settings");
+							handleDOM.remove("newPic");
+							handleDOM.remove("help");
+							handleDOM.remove("buttons");
+							
+							handleDOM.remove("circles");
+							
+							handleDOM.remove("searchIcon");
+							handleDOM.remove("search");
+							page.help(em, pw);
+						};
 						
 						//set button divs dimensions and coordinates based upon screen ratio
 						if((docHeight-(docWidth*picW))/5<=docWidth*picW*.66){
@@ -652,7 +730,122 @@
 					back.style.left=.02*docWidth+'px';
 					back.style.top=((picW*docWidth)-(.075*docWidth))*2/5+'px';
 					back.onclick=function(){slideRight2()};
+			},
+		
+		//====================create new circle page==================
+			newCircle: function(em, pw){
+				//=========group object==========
+				var circle ={
+					name:null,
+					img:null,
+					
+					locked:null,
+					
+					modAllowed:null,
+					memAllowed:null,
+					
+					type:null,
+					
+					business:null
+					
+				}
+				
+				//questions about the group
+				handleDOM.create("form", "FORM", king);
+				var form=document.getElementById("form");
+				
+					handleDOM.create("question", "DIV", form);
+					var question=document.getElementById("question");
+					question.style.color="white";
+					question.innerHTML="Is your Circle open for anyone in the public to join, or members only/join by request?<br>";
+					
+					handleDOM.create("answer", "SELECT", form);
+					var answer=document.getElementById("answer");
+					answer.innerHTML="<option value='public'>Public</option><option value='private'>Private</option><br>";
+					
+					handleDOM.create("submit", "INPUT", form);
+					var submit= document.getElementById("submit");
+					submit.type="button";
+					submit.value="Submit";
+					
+					handleDOM.create("cancel", "INPUT", form);
+					var cancel = document.getElementById("cancel");
+					cancel.type="button";
+					cancel.value="Cancel";
+					cancel.onclick=function(){
+						handleDOM.remove("cancel");
+						handleDOM.remove("submit");
+						handleDOM.remove("answer");
+						handleDOM.remove("question");
+						handleDOM.remove("form");
+						page.circle(em, pw);
+					}
+					
+					submit.onclick=function(){
+					
+						circle.locked=answer.value;
+						
+						question.innerHTML="What type of group is your new Circle?<br>";
+						answer.innerHTML="<option value='academic'>Academic</option><option value='artistic'>Artistic</option><option value='atheletic'>Athletic</option><option value='family'>Family</option><option value='social'>Social</option><br>";
+						
+						submit.onclick=function(){
+						
+							circle.type=answer.value;
+							
+							question.innerHTML="Name your Circle:<br>";
+							handleDOM.remove("answer");
+							handleDOM.create("answer", "INPUT", form);
+							answer=document.getElementById("answer");
+							answer.type="text";
+							
+							submit.onclick=function(){
+								circle.name=answer.value;
+								
+								question.innerHTML="You have created, "+circle.name+", a "+circle.locked+" "+circle.type+" Circle.<br> Is this correct?";
+								submit.onclick=function(){
+//----------------------------do database black magic here------------
+					
+									handleDOM.remove("cancel");
+									handleDOM.remove("submit");
+									handleDOM.remove("answer");
+									handleDOM.remove("question");
+									handleDOM.remove("form");
+									
+									page.main(em, pw);
+								}
+								
+							}
+						}
+						
+						cancel.value="Start Over";
+						cancel.onclick=function(){
+								circle.locked=null;
+								circle.type=null;
+								circle.name=null;
+						
+								handleDOM.remove("cancel");
+								handleDOM.remove("submit");
+								handleDOM.remove("answer");
+								handleDOM.remove("question");
+								handleDOM.remove("form");
+								page.newCircle(em, pw);
+						}
+
+					};
+			},
+		
+		//=======================change settings page==================
+			settings: function(em, pw){
+			},
+		
+		//======================take new profile picture page==========
+			newPic: function(em, pw){
+			},
+		
+		//-=====================help page==============================
+			help: function(em, pw){
 			}
+		
 		}
 		</script>
     </body>
