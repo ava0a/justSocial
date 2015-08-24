@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="msapplication-tap-highlight" content="no" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0" />
+<html><head>
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0">
 		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 		<title>Social</title>
     </head>
-    <body bgcolor="black">
+    <body id="body" bgcolor="#990033">
 		<!-----------------remove default margins------------------>
 		<style type="text/css">
 		
@@ -27,10 +24,9 @@
 		<!-----------------loading page----------------------------->
         <div id="king">
 			<div id="deviceready">
-				<p>Connecting To Device</p>
+				Connecting to device...
 			</div>
-		</div>
-		
+		</div>		
 		<!------------------scripts--------------------------------->
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
@@ -57,7 +53,7 @@
 				signup.innerHTML="Sign Up Now";
 				signup.style.position = "absolute";
 				signup.style.textAlign = "center";
-				signup.style.border = "thick solid #0000FF";
+				signup.style.border = "thick solid #FBB310";
 				signup.style.left=docWidth*.25 + "px";
 				signup.style.top=docHeight*.55 +"px";
 				signup.style.width=docWidth*.5 + "px";
@@ -138,7 +134,7 @@
 				
 				login.style.position = "absolute";
 				login.style.textAlign = "center";
-				login.style.border = "thick solid #0000FF";
+				login.style.border = "thick solid #FBB310";
 				login.style.left=docWidth*.25 + "px";
 				login.style.top=docHeight*.15 +"px";
 				login.style.width=docWidth*.5 + "px";
@@ -247,6 +243,7 @@
 	
 		//==================main page================================
 			main: function(em, pw){
+				document.getElementById("body").style.backgroundColor="black";
 				//draw main screen
 					//slide function
 					var currentR=0;
@@ -271,6 +268,12 @@
 								handleDOM.remove("title");
 								handleDOM.remove("dashboard");
 								
+								if(document.getElementById("stories")){
+									handleDOM.remove("stories");
+									handleDOM.remove("activities");
+									handleDOM.remove("meet");
+									handleDOM.remove("circles");
+								}
 								handleDOM.remove("feed");
 								
 								page.circle(em, pw);
@@ -303,6 +306,12 @@
 								
 								handleDOM.remove("searchIcon");
 								
+								if(document.getElementById("stories")){
+									handleDOM.remove("stories");
+									handleDOM.remove("activities");
+									handleDOM.remove("meet");
+									handleDOM.remove("circles");
+								}
 								handleDOM.remove("feed");
 								
 								page.search(em, pw);
@@ -369,7 +378,286 @@
 					feed.style.top=picW*docWidth+'px';
 					feed.style.width=docWidth+'px';
 					feed.style.height=docHeight-(picW*docWidth)+'px';
-					feed.style.backgroundColor = "black";
+					feed.style.backgroundColor="black";
+					
+						//feed options
+				//=======stories feed =========================================
+						handleDOM.create("stories", "DIV", feed);
+						var stories=document.getElementById("stories");
+						stories.style.position="absolute";
+						stories.style.left=0+'px';
+						stories.style.top=0+'px';
+						stories.style.width=docWidth*.5-1+'px';
+						stories.style.height=(docHeight-(picW*docWidth))*.5-1+'px';
+						stories.style.borderRight="1px solid #990033";
+						stories.style.borderBottom="1px solid #990033";
+						
+							handleDOM.create("storiesImg", "IMG", stories);
+							var storiesImg=document.getElementById("storiesImg");
+							storiesImg.src="img/storiesImg.png";
+							storiesImg.style.position="absolute";
+							storiesImg.style.left=docWidth*.5*.1+'px';
+							storiesImg.style.top=(docHeight-(picW*docWidth))*.5*.1+'px';
+							storiesImg.style.width=docWidth*.5*.8+'px';
+							storiesImg.style.height=(docHeight-(picW*docWidth))*.5*.8+'px';
+							storiesImg.onclick=function(){storyOptions()};
+							var storyOptions=function(){
+								if(document.getElementById("stories")){
+									handleDOM.remove("stories");
+									handleDOM.remove("activities");
+									handleDOM.remove("meet");
+									handleDOM.remove("circles");
+								}
+								
+								var rollFeed = function(type){
+									handleDOM.remove("random");
+									handleDOM.remove("sexy");
+									handleDOM.remove("scary");
+									handleDOM.remove("interesting");
+									handleDOM.remove("funny");
+									handleDOM.remove("confessions");
+									handleDOM.remove("newFeed");
+									
+									back.onclick=function(){
+										handleDOM.remove("feedTitle");
+										handleDOM.remove("feedPost");
+										
+										storyOptions();
+									}
+									
+									handleDOM.create("feedTitle", "DIV", feed);
+									var feedTitle=document.getElementById("feedTitle");
+									feedTitle.style.position="absolute";
+									feedTitle.style.left=docWidth*.2+'px';
+									feedTitle.style.top=(docHeight-(docWidth*picW))*(1/8)*.3+'px';
+									feedTitle.style.width=docWidth*.7+'px';
+									feedTitle.style.height=(docHeight-(picW*docWidth))*.1+'px';
+									feedTitle.style.backgroundColor="#990033";
+									feedTitle.style.fontSize=fontW*2+'px';
+									feedTitle.innerHTML="&nbsp"+type;
+									
+									handleDOM.create("feedPost", "DIV", feed);
+									var feedPost=document.getElementById("feedPost");
+									feedPost.style.position="absolute";
+									feedPost.style.left=docWidth*.1+'px';
+									feedPost.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1+'px';
+									feedPost.style.width=docWidth*.8+'px';
+									feedPost.style.minHeight=(docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9+'px';
+									feedPost.style.backgroundColor="#990033";
+									
+									var feedColor=5;
+									
+									var startX = 0
+									var dist = 0
+									
+									feed.addEventListener('touchstart', function(e){
+										var touchObj = e.changedTouches[0];
+										startX = parseInt(touchObj.clientX); 
+										e.preventDefault();
+									}, false);
+									
+									feed.addEventListener('touchmove', function(e){
+										var touchObj = e.changedTouches[0];
+										dist = parseInt(touchObj.clientX) - startX;
+										
+										feedPost.style.left=docWidth*.1+dist+'px';
+										
+										e.preventDefault();
+									}, false);
+									
+									feed.addEventListener('touchend', function(e){
+										var touchObj = e.changedTouches[0];
+										
+										feedPost.style.left=docWidth*.1+'px';
+										
+										if(dist>=docWidth*.3){
+											console.log('swiped right');
+											feedColor+=1;
+										}
+										else if(dist<=-1*docWidth*.3){
+											console.log('swiped left');
+											feedColor-=1;
+										}
+										
+										if(feedColor%7==0){
+											feedPost.style.backgroundColor="blue";
+										}
+										else if(feedColor%6==0){
+											feedPost.style.backgroundColor="purple";
+										}
+										else if(feedColor%5==0){
+											feedPost.style.backgroundColor="#990033";
+										}
+										else if(feedColor%4==0){
+											feedPost.style.backgroundColor="orange";
+										}
+										else if(feedColor%3==0){
+											feedPost.style.backgroundColor="#FBB310";
+										}
+										else if(feedColor%2==0){
+											feedPost.style.backgroundColor="green";
+										}
+										else if(feedColor%1==0){
+											feedPost.style.backgroundColor="blue";
+										}
+										
+										e.preventDefault();
+									}, false);
+									
+								};
+								
+								handleDOM.create("back", "IMG", feed);
+								var back=document.getElementById("back");
+								back.src="img/backButton.png";
+								back.style.position="absolute";
+								back.style.left=docWidth*.05+'px';
+								back.style.top=(docHeight-(docWidth*picW))*(1/8)*.3+(docHeight-(docWidth*picW))*.0125+'px';
+								back.style.width=(docHeight-(docWidth*picW))*.075+'px';
+								back.style.height=(docHeight-(docWidth*picW))*.075+'px';
+								back.onclick=function(){
+									handleDOM.remove("random");
+									handleDOM.remove("sexy");
+									handleDOM.remove("scary");
+									handleDOM.remove("interesting");
+									handleDOM.remove("funny");
+									handleDOM.remove("confessions");
+									handleDOM.remove("newFeed");
+									handleDOM.remove("back");
+									page.main(em,pw);
+								};
+								
+								handleDOM.create("newFeed", "IMG", feed);
+								var newFeed=document.getElementById("newFeed");
+								newFeed.src="img/new.png";
+								newFeed.style.position="absolute";
+								newFeed.style.left=(docWidth-(docHeight-(docWidth*picW))*.1)/2+'px';
+								newFeed.style.top=(docHeight-(docWidth*picW))*(1/8)*.3+'px';
+								newFeed.style.width=(docHeight-(docWidth*picW))*.1+'px';
+								newFeed.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								
+								handleDOM.create("confessions", "DIV", feed);
+								var confessions=document.getElementById("confessions");
+								confessions.style.fontSize=fontW*2+'px';
+								confessions.innerHTML="&nbspConfessions";
+								confessions.style.position="absolute";
+								confessions.style.left=docWidth*.1+'px';
+								confessions.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1+'px';
+								confessions.style.width=docWidth*.8+'px';
+								confessions.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								confessions.style.backgroundColor="#990033";
+								confessions.onclick=function(){rollFeed("Confessions");};
+								
+								handleDOM.create("funny", "DIV", feed);
+								var funny=document.getElementById("funny");
+								funny.style.position="absolute";
+								funny.style.left=docWidth*.1+'px';
+								funny.style.top=(docHeight-(docWidth*picW))*(3/8)*.3+(docHeight-(docWidth*picW))*.2+'px';
+								funny.style.width=docWidth*.8+'px';
+								funny.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								funny.style.backgroundColor="#990033";
+								funny.onclick=function(){rollFeed("Funny");};
+								
+								handleDOM.create("interesting", "DIV", feed);
+								var interesting=document.getElementById("interesting");
+								interesting.style.position="absolute";
+								interesting.style.left=docWidth*.1+'px';
+								interesting.style.top=(docHeight-(docWidth*picW))*(4/8)*.3+(docHeight-(docWidth*picW))*.3+'px';
+								interesting.style.width=docWidth*.8+'px';
+								interesting.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								interesting.style.backgroundColor="#990033";
+								interesting.onclick=function(){rollFeed("Interesting");};
+								
+								handleDOM.create("scary", "DIV", feed);
+								var scary=document.getElementById("scary");
+								scary.style.position="absolute";
+								scary.style.left=docWidth*.1+'px';
+								scary.style.top=(docHeight-(docWidth*picW))*(5/8)*.3+(docHeight-(docWidth*picW))*.4+'px';
+								scary.style.width=docWidth*.8+'px';
+								scary.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								scary.style.backgroundColor="#990033";
+								scary.onclick=function(){rollFeed("Scary");};
+								
+								handleDOM.create("sexy", "DIV", feed);
+								var sexy=document.getElementById("sexy");
+								sexy.style.position="absolute";
+								sexy.style.left=docWidth*.1+'px';
+								sexy.style.top=(docHeight-(docWidth*picW))*(6/8)*.3+(docHeight-(docWidth*picW))*.5+'px';
+								sexy.style.width=docWidth*.8+'px';
+								sexy.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								sexy.style.backgroundColor="#990033";
+								sexy.onclick=function(){rollFeed("Sexy");};
+								
+								handleDOM.create("random", "DIV", feed);
+								var random=document.getElementById("random");
+								random.style.position="absolute";
+								random.style.left=docWidth*.1+'px';
+								random.style.top=(docHeight-(docWidth*picW))*(7/8)*.3+(docHeight-(docWidth*picW))*.6+'px';
+								random.style.width=docWidth*.8+'px';
+								random.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								random.style.backgroundColor="#990033";
+								random.onclick=function(){rollFeed("Random");};
+								
+							}
+						
+				//=========activities feed=========================================
+						handleDOM.create("activities", "DIV", feed);
+						var activities=document.getElementById("activities");
+						activities.style.position="absolute";
+						activities.style.left=docWidth*.5+'px';
+						activities.style.top=0+'px';
+						activities.style.width=docWidth*.5-1+'px';
+						activities.style.height=(docHeight-(picW*docWidth))*.5-1+'px';
+						activities.style.borderLeft="1px solid #990033";
+						activities.style.borderBottom="1px solid #990033";
+						
+							handleDOM.create("activitiesImg", "IMG", activities);
+							var activitiesImg=document.getElementById("activitiesImg");
+							activitiesImg.src="img/activitiesImg.png";
+							activitiesImg.style.position="absolute";
+							activitiesImg.style.left=docWidth*.5*.1+'px';
+							activitiesImg.style.top=(docHeight-(picW*docWidth))*.5*.1+'px';
+							activitiesImg.style.width=docWidth*.5*.8+'px';
+							activitiesImg.style.height=(docHeight-(picW*docWidth))*.5*.8+'px';
+							
+				//========meet feed================================================
+						handleDOM.create("meet", "DIV", feed);
+						var meet=document.getElementById("meet");
+						meet.style.position="absolute";
+						meet.style.left=0+'px';
+						meet.style.top=(docHeight-(picW*docWidth))*.5+'px';
+						meet.style.width=docWidth*.5-1+'px';
+						meet.style.height=(docHeight-(picW*docWidth))*.5-1+'px';
+						meet.style.borderRight="1px solid #990033";
+						meet.style.borderTop="1px solid #990033";
+						
+							handleDOM.create("meetImg", "IMG", meet);
+							var meetImg=document.getElementById("meetImg");
+							meetImg.src="img/meetImg.png";
+							meetImg.style.position="absolute";
+							meetImg.style.left=docWidth*.5*.1+'px';
+							meetImg.style.top=(docHeight-(picW*docWidth))*.5*.1+'px';
+							meetImg.style.width=docWidth*.5*.8+'px';
+							meetImg.style.height=(docHeight-(picW*docWidth))*.5*.8+'px';
+						
+				//=======circles feed==============================================
+						handleDOM.create("circles", "DIV", feed);
+						var circles=document.getElementById("circles");
+						circles.style.position="absolute";
+						circles.style.left=docWidth*.5+'px';
+						circles.style.top=(docHeight-(picW*docWidth))*.5+'px';
+						circles.style.width=docWidth*.5-1+'px';
+						circles.style.height=(docHeight-(picW*docWidth))*.5-1+'px';
+						circles.style.borderLeft="1px solid #990033";
+						circles.style.borderTop="1px solid #990033";
+						
+							handleDOM.create("circlesImg", "IMG", circles);
+							var circlesImg=document.getElementById("circlesImg");
+							circlesImg.src="img/circlesImg.png";
+							circlesImg.style.position="absolute";
+							circlesImg.style.left=docWidth*.5*.1+'px';
+							circlesImg.style.top=(docHeight-(picW*docWidth))*.5*.1+'px';
+							circlesImg.style.width=docWidth*.5*.8+'px';
+							circlesImg.style.height=(docHeight-(picW*docWidth))*.5*.8+'px';
 				
 				//re-verify login credentials
 			},
@@ -551,7 +839,7 @@
 						//create circle button
 						handleDOM.create("newCircle", "IMG", buttons);
 						var newCircle=document.getElementById("newCircle");
-						newCircle.src="img/newCircle.png";
+						newCircle.src="img/new.png";
 						newCircle.style.position="absolute";
 						newCircle.onclick=function(){
 							handleDOM.remove("searchCircles");
@@ -741,18 +1029,19 @@
 					
 					locked:null,
 					
-					modAllowed:null,
-					memAllowed:null,
-					
-					type:null,
-					
-					business:null
+					type:null
 					
 				}
 				
 				//questions about the group
 				handleDOM.create("form", "FORM", king);
 				var form=document.getElementById("form");
+				form.style.position="absolute";
+				form.style.left=docWidth*.15+'px';
+				form.style.top=docWidth*.15+'px';
+				form.style.width = docWidth*.5+'px';
+				form.style.padding = docWidth*.1+'px';
+				form.style.border=.015*docWidth +"px solid #990033";
 				
 					handleDOM.create("question", "DIV", form);
 					var question=document.getElementById("question");
@@ -781,42 +1070,103 @@
 						page.circle(em, pw);
 					}
 					
+
 					submit.onclick=function(){
 					
 						circle.locked=answer.value;
 						
 						question.innerHTML="What type of group is your new Circle?<br>";
-						answer.innerHTML="<option value='academic'>Academic</option><option value='artistic'>Artistic</option><option value='atheletic'>Athletic</option><option value='family'>Family</option><option value='social'>Social</option><br>";
-						
+						answer.innerHTML="<option value='academic'>Academic</option><option value='artistic'>Artistic</option><option value='atheletic'>Athletic</option><option value='business'>Business</option><option value='family'>Family</option><option value='gaming>Gaming</option><option value='social'>Social</option><br>";
 						submit.onclick=function(){
-						
-							circle.type=answer.value;
+							handleDOM.create("a", "DIV", form);
+							var a= document.getElementById("a");
+							handleDOM.create("b", "DIV", form);
+							var b=document.getElementById("b");
+							handleDOM.create("c", "DIV", form);
+							var c=document.getElementById("c");
+							handleDOM.create("d", "DIV", form);
+							var d=document.getElementById("d");
+							handleDOM.create("e", "DIV", form);
+							var e=document.getElementById("e");
+							handleDOM.create("f", "DIV", form);
+							var f=document.getElementById("f");
+							handleDOM.create("g", "DIV", form);
+							var g=document.getElementById("g");
+							handleDOM.create("h", "DIV", form);
+							var h=document.getElementById("h");
+							handleDOM.create("i", "DIV", form);
+							var i=document.getElementById("i");
+							handleDOM.create("j", "DIV", form);
+							var j=document.getElementById("j");
+							handleDOM.create("k", "DIV", form);
+							var k=document.getElementById("k");
+							handleDOM.create("l", "DIV", form);
+							var l=document.getElementById("l");
+							handleDOM.create("m", "DIV", form);
+							var m=document.getElementById("m");
+							handleDOM.create("n", "DIV", form);
+							var n=document.getElementById("n");
+							handleDOM.create("o", "DIV", form);
+							var o=document.getElementById("o");
+							handleDOM.create("p", "DIV", form);
+							var p=document.getElementById("p");
+							handleDOM.create("q", "DIV", form);
+							var q=document.getElementById("q");
+							handleDOM.create("r", "DIV", form);
+							var r=document.getElementById("r");
+							handleDOM.create("s", "DIV", form);
+							var s=document.getElementById("s");
+							handleDOM.create("t", "DIV", form);
+							var t=document.getElementById("t");
+							handleDOM.create("u", "DIV", form);
+							var u=document.getElementById("u");
+							handleDOM.create("v", "DIV", form);
+							var v=document.getElementById("v");
+							handleDOM.create("w", "DIV", form);
+							var w=document.getElementById("w");
+							handleDOM.create("x", "DIV", form);
+							var x=document.getElementById("x");
+							handleDOM.create("y", "DIV", form);
+							var y=document.getElementById("y");
+							handleDOM.create("z", "DIV", form);
+							var z=document.getElementById("z");
 							
-							question.innerHTML="Name your Circle:<br>";
-							handleDOM.remove("answer");
-							handleDOM.create("answer", "INPUT", form);
-							answer=document.getElementById("answer");
-							answer.type="text";
-							
-							submit.onclick=function(){
-								circle.name=answer.value;
-								
-								question.innerHTML="You have created, "+circle.name+", a "+circle.locked+" "+circle.type+" Circle.<br> Is this correct?";
-								submit.onclick=function(){
-//----------------------------do database black magic here------------
-					
-									handleDOM.remove("cancel");
-									handleDOM.remove("submit");
-									handleDOM.remove("answer");
-									handleDOM.remove("question");
-									handleDOM.remove("form");
-									
-									page.main(em, pw);
-								}
+							a.innerHTML="a";
+							a.onclick=function(){
 								
 							}
+							
+							submit.onclick=function(){
+							
+								circle.type=answer.value;
+								
+								question.innerHTML="Name your Circle:<br>";
+								handleDOM.remove("answer");
+								handleDOM.create("answer", "INPUT", form);
+								answer=document.getElementById("answer");
+								answer.type="text";
+								
+								submit.onclick=function(){
+									circle.name=answer.value;
+									
+									question.innerHTML="You have created, "+circle.name+", a "+circle.locked+" "+circle.type+" Circle.<br> Is this correct?";
+									answer.type="hidden";
+									
+									submit.onclick=function(){
+		//------------------------do database black magic here------------
+										
+										handleDOM.remove("cancel");
+										handleDOM.remove("submit");
+										handleDOM.remove("answer");
+										handleDOM.remove("question");
+										handleDOM.remove("form");
+										
+										page.main(em, pw);
+									}
+									
+								}
+							}
 						}
-						
 						cancel.value="Start Over";
 						cancel.onclick=function(){
 								circle.locked=null;
@@ -848,5 +1198,6 @@
 		
 		}
 		</script>
-    </body>
-</html>
+    
+
+</body></html>
