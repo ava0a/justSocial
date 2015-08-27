@@ -122,10 +122,6 @@
 							//network communication error
 							submit.value = "Re-Submit";
 						}
-						else{
-							//unkown error
-							submit.value = "Re-Submit";
-						}
 					}
 					hr.send(vars);
 					
@@ -377,7 +373,7 @@
 					feed.style.left=0+'px';
 					feed.style.top=picW*docWidth+'px';
 					feed.style.width=docWidth+'px';
-					feed.style.height=docHeight-(picW*docWidth)+'px';
+					feed.style.minHeight=docHeight-(picW*docWidth)+'px';
 					feed.style.backgroundColor="black";
 					
 						//feed options
@@ -401,6 +397,8 @@
 							storiesImg.style.width=docWidth*.5*.8+'px';
 							storiesImg.style.height=(docHeight-(picW*docWidth))*.5*.8+'px';
 							storiesImg.onclick=function(){storyOptions()};
+							
+							//story options=================================
 							var storyOptions=function(){
 								if(document.getElementById("stories")){
 									handleDOM.remove("stories");
@@ -409,6 +407,335 @@
 									handleDOM.remove("circles");
 								}
 								
+								handleDOM.create("back", "IMG", feed);
+								var back=document.getElementById("back");
+								back.src="img/backButton.png";
+								back.style.position="absolute";
+								back.style.left=docWidth*.05+'px';
+								back.style.top=(docHeight-(docWidth*picW))*(1/8)*.3+(docHeight-(docWidth*picW))*.0125+'px';
+								back.style.width=(docHeight-(docWidth*picW))*.075+'px';
+								back.style.height=(docHeight-(docWidth*picW))*.075+'px';
+								back.onclick=function(){
+									handleDOM.remove("random");
+									handleDOM.remove("sexy");
+									handleDOM.remove("scary");
+									handleDOM.remove("interesting");
+									handleDOM.remove("funny");
+									handleDOM.remove("confessions");
+									handleDOM.remove("newStory");
+									handleDOM.remove("back");
+									page.main(em,pw);
+								};
+								
+								//create a new story post
+								var createStory=function(anonValue, picValue, catValue, titleValue, contentValue){
+									
+									if(document.getElementById("newStory")){
+										handleDOM.remove("random");
+										handleDOM.remove("sexy");
+										handleDOM.remove("scary");
+										handleDOM.remove("interesting");
+										handleDOM.remove("funny");
+										handleDOM.remove("confessions");
+										handleDOM.remove("newStory");
+									}
+									//adjust back onclick
+									back.onclick=function(){
+										handleDOM.remove("titleNew");
+										handleDOM.remove("optionsForm");
+										handleDOM.remove("postForm");
+										
+										storyOptions();
+									}
+									
+								//create main divs
+									//title
+									handleDOM.create("titleNew", "DIV", feed);
+									var titleNew=document.getElementById("titleNew");
+									titleNew.style.position="absolute";
+									titleNew.style.left=docWidth*.2+'px';
+									titleNew.style.top=(docHeight-(docWidth*picW))*(1/8)*.3+'px';
+									titleNew.style.width=docWidth*.7+'px';
+									titleNew.style.height=(docHeight-(picW*docWidth))*.1+'px';
+									titleNew.style.backgroundColor="#990033";
+									titleNew.style.fontSize=fontW*2+'px';
+									titleNew.style.color="#FFFFFF";
+									titleNew.innerHTML="&nbspPost Story";
+									
+									//general post options
+									handleDOM.create("optionsForm", "DIV", feed);
+									var optionsForm=document.getElementById("optionsForm");
+									optionsForm.style.visibility="visible";
+									optionsForm.style.position="absolute";
+									optionsForm.style.width=docWidth*.8+'px';
+									optionsForm.style.minHeight=(docHeight-(picW*docWidth))*.5+'px';
+									optionsForm.style.left=docWidth*.1+'px';
+									optionsForm.style.top=(docHeight-(picW*docWidth))*(2/8)*.3+(docHeight-(picW*docWidth))*.1+'px';
+									optionsForm.style.backgroundColor="#990033";
+										//options for new story
+										handleDOM.create("anon", "DIV", optionsForm);
+										var anon= document.getElementById("anon");
+										anon.style.position="absolute";
+										anon.style.width=docWidth*.8*.8+'px';
+										anon.style.minHeight=((docHeight-(picW*docWidth))*.5)/10+'px';
+										anon.style.left=docWidth*.8*.1+'px';
+										anon.style.top=((docHeight-(picW*docWidth))*.5)*1/10+'px';
+										anon.style.fontSize=docWidth*.8*.07+'px';
+										anon.style.color="#FFFFFF";
+										anon.innerHTML="<input type='checkbox' id='anonBox'>&nbsp&nbspPost anonymously?</input>";
+										document.getElementById("anonBox").style.width=docWidth*.8*.1+'px';
+										document.getElementById("anonBox").style.height=docWidth*.8*.1+'px';
+										var imgSrc=null;
+										
+										var checkCheck=function(){
+											
+											if(document.getElementById('useProfileBox').checked){
+												useProfile.innerHTML="<input type='checkbox' id='useProfileBox'>&nbsp&nbspUse default picture?</input>";
+												imgSrc=null;
+												type.style.top=$('#anon').height()+$('#useProfile').height()+((docHeight-(picW*docWidth))*.5)*3/10+'px';
+												document.getElementById('useProfileBox').setAttribute("checked", "false");
+												//send xhr
+												var hr = new XMLHttpRequest();
+												var url= "http://strugglingdev-games.com/newPost.php";
+												var vars = "profileOption="+true+"&useDefault="+true;
+												hr.open("POST", url, true);
+												hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+												hr.onreadystatechange = function(){
+													if(hr.readyState==4 && hr.status==200){
+														var return_data=hr.responseText;
+														console.log(return_data);
+													}
+												}
+												hr.send(vars);
+											}
+											else{
+												useProfile.innerHTML="<input type='checkbox' id='useProfileBox'>&nbsp&nbspUse default picture?</input><br><br><div id='imgSrc'></div>";
+												imgSrc=document.getElementById('imgSrc');
+												imgSrc.innerHTML="Add Img button here";
+												type.style.top=$('#anon').height()+$('#useProfile').height()+((docHeight-(picW*docWidth))*.5)*3/10+'px';
+											
+												//send xhr
+												var hr = new XMLHttpRequest();
+												var url= "http://strugglingdev-games.com/newPost.php";
+												var vars = "profileOption="+true+"&useDefault="+false;
+												hr.open("POST", url, true);
+												hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+												hr.onreadystatechange = function(){
+													if(hr.readyState==4 && hr.status==200){
+														var return_data=hr.responseText;
+														console.log(return_data);
+													}
+												}
+												hr.send(vars);
+											}
+											
+											document.getElementById("useProfileBox").style.width=docWidth*.8*.1+'px';
+											document.getElementById("useProfileBox").style.height=docWidth*.8*.1+'px';
+											
+											optionsForm.style.height=$('#anon').height()+$('#useProfile').height()+((docHeight-(picW*docWidth))*.5)*4/10+$('#type').height()+'px';
+											postForm.style.top=(docHeight-(picW*docWidth))*(3/8)*.3+(docHeight-(picW*docWidth))*.1+$('#optionsForm').height()+'px';
+																				
+										}
+										
+										handleDOM.create("useProfile", "DIV", optionsForm);
+										var useProfile= document.getElementById("useProfile");
+										useProfile.style.position="absolute";
+										useProfile.style.width=docWidth*.8*.8+'px';
+										useProfile.style.minHeight=((docHeight-(picW*docWidth))*.5)/10+'px';
+										useProfile.style.left=docWidth*.8*.1+'px';
+										useProfile.style.top=$('#anon').height()+((docHeight-(picW*docWidth))*.5)*2/10+'px';
+										useProfile.style.fontSize=docWidth*.8*.07+'px';
+										useProfile.style.color="#FFFFFF";
+										useProfile.innerHTML="<input type='checkbox' id='useProfileBox'>&nbsp&nbspUse default picture?</input>";
+										useProfile.onclick=function(){checkCheck()};
+										
+										document.getElementById("useProfileBox").style.width=docWidth*.8*.1+'px';
+										document.getElementById("useProfileBox").style.height=docWidth*.8*.1+'px';
+										document.getElementById('useProfileBox').setAttribute("checked", "true");
+												
+										handleDOM.create("type", "SELECT", optionsForm);
+										var type=document.getElementById("type");
+										type.style.position="absolute";
+										type.style.width=docWidth*.8*.8+'px';
+										type.style.minHeight=((docHeight-(picW*docWidth))*.5)/10+'px';
+										type.style.left=docWidth*.8*.1+'px';
+										type.style.top=$('#anon').height()+$('#useProfile').height()+((docHeight-(picW*docWidth))*.5)*3/10+'px';
+										type.style.fontSize=docWidth*.8*.07+'px';
+										type.innerHTML="<option value='null'>Category:</option><option value='Confessions'>Confession</option><option value='Funny'>Funny</option><option value='Interesting'>Interesting</option><option value='Scary'>Scary/Creepy</option><option value='sexy'>Sexy</option><option value='Random'>Random/Other</option>";
+										
+									//create 'preview' post
+									handleDOM.create("postForm", "DIV", feed);
+									var postForm=document.getElementById("postForm");
+									postForm.style.position="absolute";
+									postForm.style.width=docWidth*.8+'px';
+									postForm.style.minHeight=docWidth*.8*1.35+'px';
+									postForm.style.left=docWidth*.1+'px';
+									postForm.style.top=(docHeight-(picW*docWidth))*(3/8)*.3+(docHeight-(picW*docWidth))*.1+$('#optionsForm').height()+'px';
+									postForm.style.marginBottom=(docHeight-(picW*docWidth))*(1/8)*.3+'px';
+									postForm.style.fontSize=docWidth*.8*.05+'px';
+									postForm.style.backgroundColor="#990033";
+										//sample post img
+										handleDOM.create("previewIMG", "DIV", postForm);
+										var previewIMG=document.getElementById("previewIMG");
+										previewIMG.style.position="absolute";
+										previewIMG.style.width=docWidth*.8*.3+'px';
+										previewIMG.style.height=docWidth*.8*.3+'px';
+										previewIMG.style.left=docWidth*.8*.05+'px';
+										previewIMG.style.top=docWidth*.8*.05+'px';
+										previewIMG.style.backgroundColor="blue";
+										
+										handleDOM.create("postTitle", "INPUT", postForm);
+										var postTitle=document.getElementById("postTitle");
+										postTitle.style.visibility="visible";
+										postTitle.type="text";
+										postTitle.style.fontSize=docWidth*.8*.059+'px';
+										postTitle.placeholder="Title(optional)...";
+										postTitle.style.position="absolute";
+										postTitle.style.width=docWidth*.8*.55+'px';
+										postTitle.style.height=docWidth*.8*.15+'px';
+										postTitle.style.left=docWidth*.8*.4+'px';
+										postTitle.style.top=docWidth*.8*.125+'px';
+										
+										handleDOM.create("postContent", "TEXTAREA", postForm);
+										var postContent=document.getElementById("postContent");
+										postContent.style.visibility="visible";
+										postContent.style.fontSize=docWidth*.8*.059+'px';
+										postContent.placeholder="Your Story...";
+										postContent.style.position="absolute";
+										postContent.style.width=docWidth*.8*.9+'px';
+										postContent.style.minHeight=docWidth*.8*.7+'px';
+										postContent.style.left=docWidth*.8*.05+'px';
+										postContent.style.top=docWidth*.8*.4+'px';
+										postContent.style.marginBottom=docWidth*.8*.05;
+										
+										//refill values if here from back button
+										if(catValue){
+											if(anonValue){
+												document.getElementById("anonBox").setAttribute("checked", true);
+											}
+											else{
+												document.getElementById("anonBox").checked=false;
+											}
+											if(picValue){
+												document.getElementById("useProfileBox").setAttribute("checked", true);
+											}
+											else{
+												document.getElementById("useProfileBox").checked=false;
+											}
+											type.value=catValue;
+											postTitle.defaultValue=titleValue;
+											postContent.defaultValue=contentValue;
+										}
+										
+										handleDOM.create("submitPreview", "INPUT", postForm);
+										var submitPreview=document.getElementById("submitPreview");
+										submitPreview.type="button";
+										submitPreview.style.position="absolute";
+										submitPreview.style.left=docWidth*.8*.25+'px';
+										submitPreview.style.top=docWidth*.8*1.15+'px';
+										submitPreview.style.width=docWidth*.8*.5+'px';
+										submitPreview.style.height=docWidth*.8*.15+'px';
+										submitPreview.style.backgroundColor="#FBB310";
+										submitPreview.style.fontWeight="bold";
+										submitPreview.style.fontSize=docWidth*.8*.07+'px';
+										submitPreview.style.borderRadius=2*fontW+'px';
+										submitPreview.style.borderColor="#FFFFFF";
+										submitPreview.style.color="#000000";
+										submitPreview.style.fontFamily="helvetica, serif";
+										submitPreview.value="Preview";
+										submitPreview.onclick=function(){
+											if(type.value!='null'&&postContent.value){
+											//final submission area================================
+												var forget=false;
+												if(!postTitle.value){
+													postTitle.value=type.value;
+													forget=true;
+												}
+												optionsForm.style.visibility="hidden";
+												postTitle.style.visibility="hidden";
+												postContent.style.visibility="hidden";
+												postForm.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1+'px';
+												submitPreview.value="Submit";
+												
+												handleDOM.create("finalTitle", "DIV", postForm);
+												var finalTitle=document.getElementById("finalTitle");
+												finalTitle.style.fontSize=docWidth*.8*.059+'px';
+												finalTitle.style.color="#FFFFFF";
+												finalTitle.style.fontWeight="bold";
+												finalTitle.style.position="absolute";
+												finalTitle.style.width=docWidth*.8*.55+'px';
+												finalTitle.style.height=docWidth*.8*.15+'px';
+												finalTitle.style.left=docWidth*.8*.4+'px';
+												finalTitle.style.top=docWidth*.8*.125+'px';
+												finalTitle.innerHTML=postTitle.value;
+												
+												handleDOM.create("finalContent", "DIV", postForm);
+												var finalContent=document.getElementById("finalContent");
+												finalContent.style.fontSize=docWidth*.8*.059+'px';
+												finalContent.style.color="#FFFFFF";
+												finalContent.style.position="absolute";
+												finalContent.style.width=docWidth*.8*.9+'px';
+												finalContent.style.minHeight=docWidth*.8*.7+'px';
+												finalContent.style.left=docWidth*.8*.05+'px';
+												finalContent.style.top=docWidth*.8*.4+'px';
+												finalContent.style.marginBottom=docWidth*.8*.05;
+												finalContent.innerHTML=postContent.value;
+												
+												back.onclick=function(){
+													if(forget){
+														postTitle.value=null;
+													}
+													handleDOM.remove("finalContent");
+													handleDOM.remove("finalTitle");
+													createStory(document.getElementById("anonBox").checked,document.getElementById("useProfileBox").checked,type.value,postTitle.value, postContent.value);
+												};
+												
+												//submit finalized details to server
+												submitPreview.onclick=function(){
+													var hr = new XMLHttpRequest();
+													var url= "http://strugglingdev-games.com/newPost.php";
+													var vars = "anonValue="+document.getElementById("anonBox").checked+"&picValue="+document.getElementById("useProfileBox").checked+"&catValue="+type.value+"&titleValue="+postTitle.value+"&contentValue="+postContent.value;
+													hr.open("POST", url, true);
+													hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+													hr.onreadystatechange = function(){
+														if(hr.readyState==4 && hr.status==200){
+															var return_data=hr.responseText;
+															console.log(return_data);
+															submitPreview.value="Success!";
+															setTimeout(function(){
+																handleDOM.remove("back");
+																
+																handleDOM.remove("titleNew");
+																
+																handleDOM.remove("optionsForm");
+																
+																handleDOM.remove("postForm");
+																
+																page.main(em, pw);
+															}, 500);
+														}
+														else if(hr.readyState==4){
+															submitPreview.value="Network Error";
+														}
+													}
+													hr.send(vars);
+													submitPreview.value="Posting...";
+												}
+											}
+											else if(type.value=='null'){
+												alert("Select a category.");
+											}
+											else{
+												alert("Your story is empty.");
+											}
+										};
+										
+										optionsForm.style.height=$('#anon').height()+$('#useProfile').height()+((docHeight-(picW*docWidth))*.5)*4/10+$('#type').height()+'px';
+																			
+										
+								}
+								
+								//begin displaying the feed
 								var rollFeed = function(type){
 									handleDOM.remove("random");
 									handleDOM.remove("sexy");
@@ -416,14 +743,7 @@
 									handleDOM.remove("interesting");
 									handleDOM.remove("funny");
 									handleDOM.remove("confessions");
-									handleDOM.remove("newFeed");
-									
-									back.onclick=function(){
-										handleDOM.remove("feedTitle");
-										handleDOM.remove("feedPost");
-										
-										storyOptions();
-									}
+									handleDOM.remove("newStory");
 									
 									handleDOM.create("feedTitle", "DIV", feed);
 									var feedTitle=document.getElementById("feedTitle");
@@ -444,96 +764,168 @@
 									feedPost.style.width=docWidth*.8+'px';
 									feedPost.style.minHeight=(docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9+'px';
 									feedPost.style.backgroundColor="#990033";
+									feedPost.innerHTML="<br><br>- - - -><br><br>Settings<br><br><br><br><- - - -<br><br>Begin Viewing";
 									
-									var feedColor=5;
+									var feedPosition=0;
 									
-									var startX = 0
-									var dist = 0
+									var startX = 0;
+									var dist = 0;
+									var moved = false;
 									
-									feed.addEventListener('touchstart', function(e){
+									feedPost.addEventListener('touchstart', function(e){
 										var touchObj = e.changedTouches[0];
 										startX = parseInt(touchObj.clientX); 
-										e.preventDefault();
 									}, false);
 									
-									feed.addEventListener('touchmove', function(e){
+									feedPost.addEventListener('touchmove', function(e){
+									
+										moved=true;
+									
 										var touchObj = e.changedTouches[0];
 										dist = parseInt(touchObj.clientX) - startX;
 										
 										feedPost.style.left=docWidth*.1+dist+'px';
 										
-										e.preventDefault();
 									}, false);
 									
-									feed.addEventListener('touchend', function(e){
+									feedPost.addEventListener('touchend', function(e){
 										var touchObj = e.changedTouches[0];
 										
 										feedPost.style.left=docWidth*.1+'px';
 										
-										if(dist>=docWidth*.3){
-											console.log('swiped right');
-											feedColor+=1;
+										if(dist>=docWidth*.2 && moved){
+											if(feedPosition>=0){
+												console.log('swiped right');
+												feedPosition-=1;
+											}
 										}
-										else if(dist<=-1*docWidth*.3){
+										else if(dist<=-1*docWidth*.2 && moved){
 											console.log('swiped left');
-											feedColor-=1;
+											feedPosition+=1;
 										}
 										
-										if(feedColor%7==0){
-											feedPost.style.backgroundColor="blue";
+										if(feedPosition==0){
+											feedPost.innerHTML="<br><br>- - - -><br><br>Settings<br><br><br><br><- - - -<br><br>Begin Viewing";
 										}
-										else if(feedColor%6==0){
-											feedPost.style.backgroundColor="purple";
+										else if(feedPosition==-1){
+											feedPost.innerHTML=null;
+											
+											handleDOM.create("includes", "DIV", feedPost);
+											var includes = document.getElementById("includes");
+											includes.style.position="absolute";
+											includes.style.width=docWidth*.8*.9+'px';
+											includes.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.65+'px';
+											includes.style.left=docWidth*.8*.05+'px';
+											includes.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.04+'px';
+											includes.style.fontSize=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.05+'px';
+											includes.style.color="#FFFFFF";
+											
+												handleDOM.create("justText", "DIV", includes);
+												var justText=document.getElementById("justText");
+												justText.style.position="absolute";
+												justText.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
+												justText.style.top=0+'px';
+												justText.innerHTML="Include:";
+												
+												handleDOM.create("anons", "DIV", includes);
+												var anons = document.getElementById("anons");
+												anons.style.position="absolute";
+												anons.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
+												anons.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.13+'px';
+												anons.innerHTML="<input type='checkbox' id='anonsBox'>&nbsp&nbspAnonymous Posts</input>";
+												var anonsBox=document.getElementById("anonsBox");
+												anonsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.07+'px';
+												anonsBox.style.width=$('#anonsBox').height()+'px';
+												anons.onclick=function(){
+													if(anonsBox.checked){
+														anonsBox.setAttribute("checked", "false");
+													}
+													else{
+														anonsBox.checked="true";
+													}
+												}
+												
+												/*
+												handleDOM.create("friends", "DIV", includes);
+												var friends = document.getElementById("friends");
+												friends.style.position="absolute";
+												friends.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
+												friends.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.26+'px';
+												friends.innerHTML="<input type='checkbox' id='friendsBox' >&nbsp&nbspFriend's Posts </input>";
+												var friendsBox=document.getElementById("friendsBox");
+												friendsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.07+'px';
+												friendsBox.style.width=$('#friendsBox').height()+'px';
+												
+												handleDOM.create("publics", "DIV", includes);
+												var friends = document.getElementById("publics");
+												publics.style.position="absolute";
+												publics.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
+												publics.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.39+'px';
+												publics.innerHTML="<input type='checkbox' id='publicsBox'>&nbsp&nbspPublic Posts</input>";
+												var publicsBox=document.getElementById("publicsBox");
+												publicsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.07+'px';
+												publicsBox.style.width=$('#publicsBox').height()+'px';
+												
+												handleDOM.create("favorites", "DIV", includes);
+												var favorites = document.getElementById("favorites");
+												favorites.style.position="absolute";
+												favorites.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
+												favorites.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.52+'px';
+												favorites.innerHTML="<input type='checkbox' id='favsBox' >&nbsp&nbspMy Favorited Posts</input>";
+												var favsBox=document.getElementById("favsBox");
+												favsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.07+'px';
+												favsBox.style.width=$('#favsBox').height()+'px';
+												*/
+											handleDOM.create("sort", "SELECT", feedPost);
+											var sort=document.getElementById("sort");
+											sort.style.position="absolute";
+											sort.style.width=docWidth*.8*.9+'px';
+											sort.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
+											sort.style.left=docWidth*.8*.05+'px';
+											sort.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.73+'px';
+											sort.innerHTML="<option value='legendary'>Legendary</option><option value='popular'>Popular</option><option value='trending'>Trending Now</option><option value='recent'>Most Recent</option><option value='controversial'>Mixed Ratings</option>";
+											
+											handleDOM.create("submitSettings", "INPUT", feedPost);
+											var submitSettings=document.getElementById("submitSettings");
+											submitSettings.type="button";
+											submitSettings.style.position="absolute";
+											submitSettings.style.maxWidth=docWidth*.8*.7+'px';
+											submitSettings.style.width=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.3+'px';
+											submitSettings.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
+											submitSettings.style.left=(docWidth*.8-$('#submitSettings').width())/2+'px';
+											submitSettings.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.87+'px';
+											
 										}
-										else if(feedColor%5==0){
-											feedPost.style.backgroundColor="#990033";
-										}
-										else if(feedColor%4==0){
-											feedPost.style.backgroundColor="orange";
-										}
-										else if(feedColor%3==0){
-											feedPost.style.backgroundColor="#FBB310";
-										}
-										else if(feedColor%2==0){
-											feedPost.style.backgroundColor="green";
-										}
-										else if(feedColor%1==0){
-											feedPost.style.backgroundColor="blue";
+										else{
+											feedPost.innerHTML=null;
+											//call PHP file to read in feed data
+											//use feed data to populate feed divs
+											
 										}
 										
-										e.preventDefault();
+										moved=false;
 									}, false);
+									
+									back.onclick=function(){
+										handleDOM.remove("feedTitle");
+										handleDOM.remove("feedPost");
+										
+										storyOptions();
+									};
+									
 									
 								};
 								
-								handleDOM.create("back", "IMG", feed);
-								var back=document.getElementById("back");
-								back.src="img/backButton.png";
-								back.style.position="absolute";
-								back.style.left=docWidth*.05+'px';
-								back.style.top=(docHeight-(docWidth*picW))*(1/8)*.3+(docHeight-(docWidth*picW))*.0125+'px';
-								back.style.width=(docHeight-(docWidth*picW))*.075+'px';
-								back.style.height=(docHeight-(docWidth*picW))*.075+'px';
-								back.onclick=function(){
-									handleDOM.remove("random");
-									handleDOM.remove("sexy");
-									handleDOM.remove("scary");
-									handleDOM.remove("interesting");
-									handleDOM.remove("funny");
-									handleDOM.remove("confessions");
-									handleDOM.remove("newFeed");
-									handleDOM.remove("back");
-									page.main(em,pw);
-								};
-								
-								handleDOM.create("newFeed", "IMG", feed);
-								var newFeed=document.getElementById("newFeed");
-								newFeed.src="img/new.png";
-								newFeed.style.position="absolute";
-								newFeed.style.left=(docWidth-(docHeight-(docWidth*picW))*.1)/2+'px';
-								newFeed.style.top=(docHeight-(docWidth*picW))*(1/8)*.3+'px';
-								newFeed.style.width=(docHeight-(docWidth*picW))*.1+'px';
-								newFeed.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								//create different story options
+								handleDOM.create("newStory", "IMG", feed);
+								var newStory=document.getElementById("newStory");
+								newStory.src="img/new.png";
+								newStory.style.position="absolute";
+								newStory.style.left=(docWidth-(docHeight-(docWidth*picW))*.1)/2+'px';
+								newStory.style.top=(docHeight-(docWidth*picW))*(1/8)*.3+'px';
+								newStory.style.width=(docHeight-(docWidth*picW))*.1+'px';
+								newStory.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								newStory.onclick=function(){createStory();};
 								
 								handleDOM.create("confessions", "DIV", feed);
 								var confessions=document.getElementById("confessions");
@@ -549,6 +941,8 @@
 								
 								handleDOM.create("funny", "DIV", feed);
 								var funny=document.getElementById("funny");
+								funny.style.fontSize=fontW*2+'px';
+								funny.innerHTML="&nbspFunny";
 								funny.style.position="absolute";
 								funny.style.left=docWidth*.1+'px';
 								funny.style.top=(docHeight-(docWidth*picW))*(3/8)*.3+(docHeight-(docWidth*picW))*.2+'px';
@@ -559,6 +953,8 @@
 								
 								handleDOM.create("interesting", "DIV", feed);
 								var interesting=document.getElementById("interesting");
+								interesting.style.fontSize=fontW*2+'px';
+								interesting.innerHTML="&nbspInteresting";
 								interesting.style.position="absolute";
 								interesting.style.left=docWidth*.1+'px';
 								interesting.style.top=(docHeight-(docWidth*picW))*(4/8)*.3+(docHeight-(docWidth*picW))*.3+'px';
@@ -569,6 +965,8 @@
 								
 								handleDOM.create("scary", "DIV", feed);
 								var scary=document.getElementById("scary");
+								scary.style.fontSize=fontW*2+'px';
+								scary.innerHTML="&nbspScary/Creepy";
 								scary.style.position="absolute";
 								scary.style.left=docWidth*.1+'px';
 								scary.style.top=(docHeight-(docWidth*picW))*(5/8)*.3+(docHeight-(docWidth*picW))*.4+'px';
@@ -579,6 +977,8 @@
 								
 								handleDOM.create("sexy", "DIV", feed);
 								var sexy=document.getElementById("sexy");
+								sexy.style.fontSize=fontW*2+'px';
+								sexy.innerHTML="&nbspSexy";
 								sexy.style.position="absolute";
 								sexy.style.left=docWidth*.1+'px';
 								sexy.style.top=(docHeight-(docWidth*picW))*(6/8)*.3+(docHeight-(docWidth*picW))*.5+'px';
@@ -589,6 +989,8 @@
 								
 								handleDOM.create("random", "DIV", feed);
 								var random=document.getElementById("random");
+								random.style.fontSize=fontW*2+'px';
+								random.innerHTML="&nbspRandom/Other";
 								random.style.position="absolute";
 								random.style.left=docWidth*.1+'px';
 								random.style.top=(docHeight-(docWidth*picW))*(7/8)*.3+(docHeight-(docWidth*picW))*.6+'px';
