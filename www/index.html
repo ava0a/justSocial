@@ -774,17 +774,13 @@
 									var moved = false;
 									
 									feedPost.addEventListener('touchstart', function(e){
-										feedTitle.innerHTML="touchstart";
-										
-										e.preventDefault();
+										//e.preventDefault();
 										
 										var touchObj = e.changedTouches[0];
 										startX = parseInt(touchObj.clientX); 
 									}, false);
 									
 									feedPost.addEventListener('touchmove', function(e){
-										feedTitle.innerHTML="touchmove";
-										
 										e.preventDefault();
 									
 										moved=true;
@@ -797,7 +793,6 @@
 									}, false);
 									
 									feedPost.addEventListener('touchend', function(e){
-										feedTitle.innerHTML="touchEnd";
 										var didSwipe=false;
 										
 										var touchObj = e.changedTouches[0];
@@ -903,6 +898,9 @@
 											submitSettings.style.left=(docWidth*.8-$('#submitSettings').width())/2+'px';
 											submitSettings.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.87+'px';
 											submitSettings.value="Submit";
+											submitSettings.onclick=function(){
+											//submit settings to db here==================
+											}
 											
 										}
 										else if(didSwipe){
