@@ -737,6 +737,7 @@
 								
 								//begin displaying the feed
 								var rollFeed = function(type){
+									
 									handleDOM.remove("random");
 									handleDOM.remove("sexy");
 									handleDOM.remove("scary");
@@ -789,25 +790,29 @@
 									}, false);
 									
 									feedPost.addEventListener('touchend', function(e){
+								
+										var didSwipe=false;
+										
 										var touchObj = e.changedTouches[0];
 										
 										feedPost.style.left=docWidth*.1+'px';
 										
 										if(dist>=docWidth*.2 && moved){
 											if(feedPosition>=0){
-												console.log('swiped right');
 												feedPosition-=1;
+												didSwipe=true;
 											}
 										}
 										else if(dist<=-1*docWidth*.2 && moved){
 											console.log('swiped left');
 											feedPosition+=1;
+											didSwipe=true;
 										}
 										
-										if(feedPosition==0){
+										if(feedPosition==0&&didSwipe){
 											feedPost.innerHTML="<br><br>- - - -><br><br>Settings<br><br><br><br><- - - -<br><br>Begin Viewing";
 										}
-										else if(feedPosition==-1){
+										else if(feedPosition==-1&&didSwipe){
 											feedPost.innerHTML=null;
 											
 											handleDOM.create("includes", "DIV", feedPost);
@@ -825,6 +830,7 @@
 												justText.style.position="absolute";
 												justText.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
 												justText.style.top=0+'px';
+												justText.style.fontSize=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.07+'px';
 												justText.innerHTML="Include:";
 												
 												handleDOM.create("anons", "DIV", includes);
@@ -832,28 +838,21 @@
 												anons.style.position="absolute";
 												anons.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
 												anons.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.13+'px';
-												anons.innerHTML="<input type='checkbox' id='anonsBox'>&nbsp&nbspAnonymous Posts</input>";
+												anons.innerHTML="<input type='checkbox' id='anonsBox'>&nbspAnonymous Posts</input>";
+												anons.style.verticalAlign="top";
 												var anonsBox=document.getElementById("anonsBox");
-												anonsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.07+'px';
+												anonsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.05+'px';
 												anonsBox.style.width=$('#anonsBox').height()+'px';
-												anons.onclick=function(){
-													if(anonsBox.checked){
-														anonsBox.setAttribute("checked", "false");
-													}
-													else{
-														anonsBox.checked="true";
-													}
-												}
 												
-												/*
 												handleDOM.create("friends", "DIV", includes);
 												var friends = document.getElementById("friends");
 												friends.style.position="absolute";
 												friends.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
 												friends.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.26+'px';
-												friends.innerHTML="<input type='checkbox' id='friendsBox' >&nbsp&nbspFriend's Posts </input>";
+												friends.innerHTML="<input type='checkbox' id='friendsBox' >&nbspFriend's Posts </input>";
+												friends.style.verticalAlign="top";
 												var friendsBox=document.getElementById("friendsBox");
-												friendsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.07+'px';
+												friendsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.05+'px';
 												friendsBox.style.width=$('#friendsBox').height()+'px';
 												
 												handleDOM.create("publics", "DIV", includes);
@@ -861,9 +860,10 @@
 												publics.style.position="absolute";
 												publics.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
 												publics.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.39+'px';
-												publics.innerHTML="<input type='checkbox' id='publicsBox'>&nbsp&nbspPublic Posts</input>";
+												publics.innerHTML="<input type='checkbox' id='publicsBox'>&nbspPublic Posts</input>";
+												publics.style.verticalAlign="top";
 												var publicsBox=document.getElementById("publicsBox");
-												publicsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.07+'px';
+												publicsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.05+'px';
 												publicsBox.style.width=$('#publicsBox').height()+'px';
 												
 												handleDOM.create("favorites", "DIV", includes);
@@ -871,11 +871,12 @@
 												favorites.style.position="absolute";
 												favorites.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
 												favorites.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.52+'px';
-												favorites.innerHTML="<input type='checkbox' id='favsBox' >&nbsp&nbspMy Favorited Posts</input>";
+												favorites.innerHTML="<input type='checkbox' id='favsBox' >&nbspMy Favorited Posts</input>";
+												favorites.style.verticalAlign="top";
 												var favsBox=document.getElementById("favsBox");
-												favsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.07+'px';
+												favsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.05+'px';
 												favsBox.style.width=$('#favsBox').height()+'px';
-												*/
+												
 											handleDOM.create("sort", "SELECT", feedPost);
 											var sort=document.getElementById("sort");
 											sort.style.position="absolute";
@@ -894,9 +895,10 @@
 											submitSettings.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
 											submitSettings.style.left=(docWidth*.8-$('#submitSettings').width())/2+'px';
 											submitSettings.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.87+'px';
+											submitSettings.value="Submit";
 											
 										}
-										else{
+										else if(didSwipe){
 											feedPost.innerHTML=null;
 											//call PHP file to read in feed data
 											//use feed data to populate feed divs
