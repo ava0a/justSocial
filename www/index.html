@@ -775,12 +775,17 @@
 									
 									feedPost.addEventListener('touchstart', function(e){
 										feedTitle.innerHTML="touchstart";
+										
+										e.preventDefault();
+										
 										var touchObj = e.changedTouches[0];
 										startX = parseInt(touchObj.clientX); 
 									}, false);
 									
 									feedPost.addEventListener('touchmove', function(e){
 										feedTitle.innerHTML="touchmove";
+										
+										e.preventDefault();
 									
 										moved=true;
 									
