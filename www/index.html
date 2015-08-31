@@ -811,105 +811,156 @@
 											didSwipe=true;
 										}
 										
-										if(feedPosition==0&&didSwipe){
-											feedPost.innerHTML="<br><br>- - - -><br><br>Settings<br><br><br><br><- - - -<br><br>Begin Viewing";
-										}
-										else if(feedPosition==-1&&didSwipe){
-											feedPost.innerHTML=null;
-											
-											handleDOM.create("includes", "DIV", feedPost);
-											var includes = document.getElementById("includes");
-											includes.style.position="absolute";
-											includes.style.width=docWidth*.8*.9+'px';
-											includes.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.65+'px';
-											includes.style.left=docWidth*.8*.05+'px';
-											includes.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.04+'px';
-											includes.style.fontSize=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.05+'px';
-											includes.style.color="#FFFFFF";
-											
-												handleDOM.create("justText", "DIV", includes);
-												var justText=document.getElementById("justText");
-												justText.style.position="absolute";
-												justText.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
-												justText.style.top=0+'px';
-												justText.style.fontSize=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.07+'px';
-												justText.innerHTML="Include:";
-												
-												handleDOM.create("anons", "DIV", includes);
-												var anons = document.getElementById("anons");
-												anons.style.position="absolute";
-												anons.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
-												anons.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.13+'px';
-												anons.innerHTML="<input type='checkbox' id='anonsBox'>&nbspAnonymous Posts</input>";
-												anons.style.verticalAlign="top";
-												var anonsBox=document.getElementById("anonsBox");
-												anonsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.05+'px';
-												anonsBox.style.width=$('#anonsBox').height()+'px';
-												
-												handleDOM.create("friends", "DIV", includes);
-												var friends = document.getElementById("friends");
-												friends.style.position="absolute";
-												friends.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
-												friends.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.26+'px';
-												friends.innerHTML="<input type='checkbox' id='friendsBox' >&nbspFriend's Posts </input>";
-												friends.style.verticalAlign="top";
-												var friendsBox=document.getElementById("friendsBox");
-												friendsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.05+'px';
-												friendsBox.style.width=$('#friendsBox').height()+'px';
-												
-												handleDOM.create("publics", "DIV", includes);
-												var friends = document.getElementById("publics");
-												publics.style.position="absolute";
-												publics.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
-												publics.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.39+'px';
-												publics.innerHTML="<input type='checkbox' id='publicsBox'>&nbspPublic Posts</input>";
-												publics.style.verticalAlign="top";
-												var publicsBox=document.getElementById("publicsBox");
-												publicsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.05+'px';
-												publicsBox.style.width=$('#publicsBox').height()+'px';
-												
-												handleDOM.create("favorites", "DIV", includes);
-												var favorites = document.getElementById("favorites");
-												favorites.style.position="absolute";
-												favorites.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
-												favorites.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.52+'px';
-												favorites.innerHTML="<input type='checkbox' id='favsBox' >&nbspMy Favorited Posts</input>";
-												favorites.style.verticalAlign="top";
-												var favsBox=document.getElementById("favsBox");
-												favsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.05+'px';
-												favsBox.style.width=$('#favsBox').height()+'px';
-												
-											handleDOM.create("sort", "SELECT", feedPost);
-											var sort=document.getElementById("sort");
-											sort.style.position="absolute";
-											sort.style.width=docWidth*.8*.9+'px';
-											sort.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
-											sort.style.left=docWidth*.8*.05+'px';
-											sort.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.73+'px';
-											sort.innerHTML="<option value='legendary'>Legendary</option><option value='popular'>Popular</option><option value='trending'>Trending Now</option><option value='recent'>Most Recent</option><option value='controversial'>Mixed Ratings</option>";
-											
-											handleDOM.create("submitSettings", "INPUT", feedPost);
-											var submitSettings=document.getElementById("submitSettings");
-											submitSettings.type="button";
-											submitSettings.style.position="absolute";
-											submitSettings.style.maxWidth=docWidth*.8*.7+'px';
-											submitSettings.style.width=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.3+'px';
-											submitSettings.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
-											submitSettings.style.left=(docWidth*.8-$('#submitSettings').width())/2+'px';
-											submitSettings.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.87+'px';
-											submitSettings.value="Submit";
-											submitSettings.onclick=function(){
-											//submit settings to db here==================
+										var feedSlide=function(){
+											if(feedPosition==0&&didSwipe){
+												feedPost.innerHTML="<br><br>- - - -><br><br>Settings<br><br><br><br><- - - -<br><br>Begin Viewing";
 											}
-											
+											else if(feedPosition==-1&&didSwipe){
+													feedPost.innerHTML=null;
+													
+													handleDOM.create("includes", "DIV", feedPost);
+													var includes = document.getElementById("includes");
+													includes.style.position="absolute";
+													includes.style.width=docWidth*.8*.9+'px';
+													includes.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.65+'px';
+													includes.style.left=docWidth*.8*.05+'px';
+													includes.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.04+'px';
+													includes.style.fontSize=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.05+'px';
+													includes.style.color="#FFFFFF";
+													
+														handleDOM.create("justText", "DIV", includes);
+														var justText=document.getElementById("justText");
+														justText.style.position="absolute";
+														justText.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
+														justText.style.top=0+'px';
+														justText.style.fontSize=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.07+'px';
+														justText.innerHTML="Include:";
+														
+														handleDOM.create("anons", "DIV", includes);
+														var anons = document.getElementById("anons");
+														anons.style.position="absolute";
+														anons.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
+														anons.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.13+'px';
+														anons.innerHTML="<input type='checkbox' id='anonsBox'>&nbspAnonymous Posts</input>";
+														anons.style.verticalAlign="top";
+														var anonsBox=document.getElementById("anonsBox");
+														anonsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.05+'px';
+														anonsBox.style.width=$('#anonsBox').height()+'px';
+														
+														handleDOM.create("friends", "DIV", includes);
+														var friends = document.getElementById("friends");
+														friends.style.position="absolute";
+														friends.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
+														friends.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.26+'px';
+														friends.innerHTML="<input type='checkbox' id='friendsBox' >&nbspFriend's Posts </input>";
+														friends.style.verticalAlign="top";
+														var friendsBox=document.getElementById("friendsBox");
+														friendsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.05+'px';
+														friendsBox.style.width=$('#friendsBox').height()+'px';
+														
+														handleDOM.create("publics", "DIV", includes);
+														var friends = document.getElementById("publics");
+														publics.style.position="absolute";
+														publics.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
+														publics.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.39+'px';
+														publics.innerHTML="<input type='checkbox' id='publicsBox'>&nbspPublic Posts</input>";
+														publics.style.verticalAlign="top";
+														var publicsBox=document.getElementById("publicsBox");
+														publicsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.05+'px';
+														publicsBox.style.width=$('#publicsBox').height()+'px';
+														
+														handleDOM.create("favorites", "DIV", includes);
+														var favorites = document.getElementById("favorites");
+														favorites.style.position="absolute";
+														favorites.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
+														favorites.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.52+'px';
+														favorites.innerHTML="<input type='checkbox' id='favsBox' >&nbspMy Favorited Posts</input>";
+														favorites.style.verticalAlign="top";
+														var favsBox=document.getElementById("favsBox");
+														favsBox.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.05+'px';
+														favsBox.style.width=$('#favsBox').height()+'px';
+														
+													handleDOM.create("sort", "SELECT", feedPost);
+													var sort=document.getElementById("sort");
+													sort.style.position="absolute";
+													sort.style.width=docWidth*.8*.9+'px';
+													sort.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
+													sort.style.left=docWidth*.8*.05+'px';
+													sort.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.73+'px';
+													sort.innerHTML="<option value='null'>Sort By:</option><option value='legendary'>Legendary</option><option value='popular'>Popular</option><option value='trending'>Trending Now</option><option value='recent'>Most Recent</option><option value='controversial'>Mixed Ratings</option>";
+													
+													handleDOM.create("submitSettings", "INPUT", feedPost);
+													var submitSettings=document.getElementById("submitSettings");
+													submitSettings.type="button";
+													submitSettings.style.position="absolute";
+													submitSettings.style.maxWidth=docWidth*.8*.7+'px';
+													submitSettings.style.width=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.3+'px';
+													submitSettings.style.height=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.1+'px';
+													submitSettings.style.left=(docWidth*.8-$('#submitSettings').width())/2+'px';
+													submitSettings.style.top=((docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9)*.87+'px';
+													submitSettings.value="Submit";
+													submitSettings.onclick=function(){
+														//submit settings to db here==================
+														var hr = new XMLHttpRequest();
+														var url= "http://strugglingdev-games.com/editSettings.php";
+														var vars = "settings="+sort.value;
+														if(anonsBox.checked==true){
+															vars+=",anon";
+														}
+														else{
+															vars+=",null";
+														}
+														if(friendsBox.checked==true){
+															vars+=",friends";
+														}
+														else{
+															vars+=",null";
+														}
+														if(publicsBox.checked==true){
+															vars+=",public";
+														}
+														else{
+															vars+=",null";
+														}
+														if(favsBox.checked==true){
+															vars+=",favorites";
+														}
+														else{
+															vars+=",null";
+														}
+														if(sort.value!="null" && (favsBox.checked==true || publicsBox.checked==true || friendsBox.checked==true || anonsBox.checked==true)){
+															hr.open("POST", url, true);
+															hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+															hr.onreadystatechange = function(){
+																if(hr.readyState==4 && hr.status==200){
+																	var return_data=hr.responseText;
+																	console.log(return_data);
+																	submitSettings.value="Success!";
+																	setTimeout(function(){
+																		feedPosition=0;
+																		feedSlide();
+																	}, 500);
+																}
+															}
+															hr.send(vars);
+															submitSettings.value="Submitting...";
+														}
+														else if(sort.value=="null"){
+															alert("Choose a sort method.")
+														}
+														else{
+															alert("Include at least one type of post.");
+														}
+													}
+												}
+											else if(didSwipe){
+												feedPost.innerHTML=null;
+												//call PHP file to read in feed data
+												//use feed data to populate feed divs
+												
+											}
 										}
-										else if(didSwipe){
-											feedPost.innerHTML=null;
-											//call PHP file to read in feed data
-											//use feed data to populate feed divs
-											
-										}
-										
+										feedSlide();
 										moved=false;
 									}, false);
 									
