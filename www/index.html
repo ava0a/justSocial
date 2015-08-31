@@ -774,11 +774,13 @@
 									var moved = false;
 									
 									feedPost.addEventListener('touchstart', function(e){
+										feedTitle.innerHTML="touchstart";
 										var touchObj = e.changedTouches[0];
 										startX = parseInt(touchObj.clientX); 
 									}, false);
 									
 									feedPost.addEventListener('touchmove', function(e){
+										feedTitle.innerHTML="touchmove";
 									
 										moved=true;
 									
@@ -790,7 +792,7 @@
 									}, false);
 									
 									feedPost.addEventListener('touchend', function(e){
-										alert("TEST");
+										feedTitle.innerHTML="touchEnd";
 										var didSwipe=false;
 										
 										var touchObj = e.changedTouches[0];
