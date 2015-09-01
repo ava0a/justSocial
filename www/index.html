@@ -737,6 +737,7 @@
 								
 								//begin displaying the feed
 								var rollFeed = function(type){
+									var loadedAt=0;
 									
 									handleDOM.remove("random");
 									handleDOM.remove("sexy");
@@ -765,6 +766,7 @@
 									feedPost.style.width=docWidth*.8+'px';
 									feedPost.style.minHeight=(docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9+'px';
 									feedPost.style.backgroundColor="#990033";
+									feedPost.style.color="#FFFFFF";
 									feedPost.innerHTML="<br><br>- - - -><br><br>Settings<br><br><br><br><- - - -<br><br>Begin Viewing";
 									
 									var feedPosition=0;
@@ -772,6 +774,15 @@
 									var startX = 0;
 									var dist = 0;
 									var moved = false;
+									var feedData;
+									var feedIdData=[];
+									var feedTypeData=[];
+									var feedTitleData=[];
+									var feedContentData=[];
+									var feedDateData=[];
+									var feedCreatorData=[];
+									var feedUpVotesData=[];
+									var feedDownVotesData=[];
 									
 									feedPost.addEventListener('touchstart', function(e){
 										//e.preventDefault();
@@ -806,10 +817,20 @@
 											}
 										}
 										else if(dist<=-1*docWidth*.2 && moved){
-											console.log('swiped left');
 											feedPosition+=1;
 											didSwipe=true;
 										}
+										var loaded=true;
+										var loadCheck=function(){
+											if(feedPosition%15==1){
+												if(loadedAt<feedPosition){
+													loaded=false;
+													loadedAt=feedPosition;
+												}
+											}
+										}
+										
+										loadCheck();
 										
 										var feedSlide=function(){
 											if(feedPosition==0&&didSwipe){
@@ -954,9 +975,85 @@
 													}
 												}
 											else if(didSwipe){
+												
 												feedPost.innerHTML=null;
-												//call PHP file to read in feed data
-												//use feed data to populate feed divs
+												
+												//populate feed with data
+												var populate=function(){
+													if(feedTitleData[feedPosition]){
+														handleDOM.create("previewIMG", "DIV", feedPost);
+														var previewIMG=document.getElementById("previewIMG");
+														previewIMG.style.position="absolute";
+														previewIMG.style.width=docWidth*.8*.3+'px';
+														previewIMG.style.height=docWidth*.8*.3+'px';
+														previewIMG.style.left=docWidth*.8*.05+'px';
+														previewIMG.style.top=docWidth*.8*.05+'px';
+														previewIMG.style.backgroundColor="blue";
+														
+														handleDOM.create("postTitle", "DIV", feedPost);
+														var postTitle=document.getElementById("postTitle");
+														postTitle.style.visibility="visible";
+														postTitle.style.fontSize=docWidth*.8*.059+'px';
+														postTitle.style.position="absolute";
+														postTitle.style.width=docWidth*.8*.55+'px';
+														postTitle.style.height=docWidth*.8*.15+'px';
+														postTitle.style.left=docWidth*.8*.4+'px';
+														postTitle.style.top=docWidth*.8*.125+'px';
+														postTitle.innerHTML=feedTitleData[feedPosition];
+														
+														handleDOM.create("postContent", "DIV", feedPost);
+														var postContent=document.getElementById("postContent");
+														postContent.style.visibility="visible";
+														postContent.style.fontSize=docWidth*.8*.059+'px';
+														postContent.style.position="absolute";
+														postContent.style.width=docWidth*.8*.9+'px';
+														postContent.style.minHeight=docWidth*.8*.7+'px';
+														postContent.style.left=docWidth*.8*.05+'px';
+														postContent.style.top=docWidth*.8*.4+'px';
+														postContent.style.marginBottom=docWidth*.8*.05;
+														postContent.innerHTML=feedContentData[feedPosition];
+													}
+												}
+												if(!loaded){
+													//call PHP file to read in feed settings and data
+													var hr = new XMLHttpRequest();
+													var url= "http://strugglingdev-games.com/populateFeed.php";
+													var data = "data=stories";
+													hr.open("POST", url, true);
+													hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+													hr.onreadystatechange = function(){	
+														if(hr.readyState==4 && hr.status==200){
+															data=hr.responseText;
+															
+															//populate JS data with query result
+															feedData=data.split("+");
+															for(var i=0; i<15; i++){
+																if(feedData[i]){
+																	var splitter=feedData[i].split(",");
+																	feedIdData[i+loadedAt]=splitter[0];
+																	feedTypeData[i+loadedAt]=splitter[1];
+																	feedTitleData[i+loadedAt]=splitter[2];
+																	feedContentData[i+loadedAt]=splitter[3];
+																	feedDateData[i+loadedAt]=splitter[4];
+																	feedCreatorData[i+loadedAt]=splitter[5];
+																	feedUpVotesData[i+loadedAt]=splitter[6];
+																	feedDownVotesData[i+loadedAt]=splitter[7];
+																}
+																else{
+																	feedTitleData[i+loadedAt]="Not Found";
+																	feedContentData[i+loadedAt]="You've reached the edge of the abyss, kid.<br>There's nowhere else to go; better start over and see what's new.";
+																	feedCreatorData[i+loadedAt]="Mr. Anonymous";
+																	feedDateData[i+loadedAt]="March 12, 1885";
+																}
+															}
+															populate();
+														}
+													}
+													hr.send(data);
+												}
+												else{
+													populate();
+												}
 												
 											}
 										}
