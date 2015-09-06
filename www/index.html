@@ -242,7 +242,6 @@
 	
 		//==================main page================================
 			main: function(em, pw){
-				console.log(em);
 				document.getElementById("body").style.backgroundColor="black";
 				//draw main screen
 					//slide function
@@ -507,7 +506,6 @@
 												hr.onreadystatechange = function(){
 													if(hr.readyState==4 && hr.status==200){
 														var return_data=hr.responseText;
-														console.log(return_data);
 													}
 												}
 												hr.send(vars);
@@ -527,7 +525,6 @@
 												hr.onreadystatechange = function(){
 													if(hr.readyState==4 && hr.status==200){
 														var return_data=hr.responseText;
-														console.log(return_data);
 													}
 												}
 												hr.send(vars);
@@ -672,7 +669,6 @@
 													hr.onreadystatechange = function(){
 														if(hr.readyState==4 && hr.status==200){
 															var return_data=hr.responseText;
-															console.log(return_data);
 															submitPreview.value="Success!";
 															setTimeout(function(){
 																handleDOM.remove("back");
@@ -930,7 +926,6 @@
 															hr.onreadystatechange = function(){
 																if(hr.readyState==4 && hr.status==200){
 																	var return_data=hr.responseText;
-																	console.log(return_data);
 																	submitSettings.value="Success!";
 																	setTimeout(function(){
 																		feedPosition=0;
@@ -956,14 +951,14 @@
 												//populate feed with data
 												var populate=function(){
 													if(feedContentData[feedPosition]){
-														handleDOM.create("previewIMG", "DIV", feedPost);
+														handleDOM.create("previewIMG", "IMG", feedPost);
 														var previewIMG=document.getElementById("previewIMG");
+														previewIMG.src="img/profile.jpg";
 														previewIMG.style.position="absolute";
 														previewIMG.style.width=docWidth*.8*.3+'px';
 														previewIMG.style.height=docWidth*.8*.3+'px';
 														previewIMG.style.left=docWidth*.8*.05+'px';
 														previewIMG.style.top=docWidth*.8*.05+'px';
-														previewIMG.style.backgroundColor="blue";
 														
 														var voteCounter=feedUpVotesData[feedPosition]-feedDownVotesData[feedPosition];
 														
@@ -976,7 +971,6 @@
 														upVote.style.left=docWidth*.8*.4+'px';
 														upVote.style.top=docWidth*.8*.05+'px';
 														upVote.onclick=function(){
-																console.log("upclicked");
 																//call PHP file to read in feed settings and data
 																var hr = new XMLHttpRequest();
 																var url= "http://strugglingdev-games.com/affectVote.php";
@@ -986,7 +980,6 @@
 																hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 																hr.onreadystatechange = function(){
 																	if(hr.readyState==4 && hr.status==200){
-																		console.log("communicated with server");
 																		data=hr.responseText;
 																		if (data=="1"){
 																			voteCounter+=1;
@@ -1033,7 +1026,6 @@
 														downVote.style.left=docWidth*.8*.4+'px';
 														downVote.style.top=docWidth*.8*.25+'px';
 														downVote.onclick=function(){
-																console.log("downclicked");
 																//call PHP file to read in feed settings and data
 																var hr = new XMLHttpRequest();
 																var url= "http://strugglingdev-games.com/affectVote.php";
@@ -1064,12 +1056,30 @@
 																hr.send(data);
 														};
 														
-														/*
+														
 														handleDOM.create("addFav", "IMG", feedPost);
 														var addFav=document.getElementById("addFav");
+														addFav.src="img/addFavorite.png";
+														addFav.style.position="absolute";
+														addFav.style.width=docWidth*.8*.1+'px';
+														addFav.style.height=docWidth*.8*.1+'px';
+														addFav.style.left=docWidth*.8*.8+'px';
+														addFav.style.top=docWidth*.8*.05+'px';
+														addFav.onclick=function(){
+															alert("Favorites not yet implemented.");
+														}
 														
 														handleDOM.create("comments", "IMG", feedPost);
-														var comments=document.getElementById("comments");*/
+														var comments=document.getElementById("comments");
+														comments.src="img/comments.png";
+														comments.style.position="absolute";
+														comments.style.width=docWidth*.8*.1+'px';
+														comments.style.height=docWidth*.8*.1+'px';
+														comments.style.left=docWidth*.8*.8+'px';
+														comments.style.top=docWidth*.8*.25+'px';
+														comments.onclick=function(){
+															alert("Comments not yet implemented.");
+														}
 														
 														handleDOM.create("postContent", "DIV", feedPost);
 														var postContent=document.getElementById("postContent");
