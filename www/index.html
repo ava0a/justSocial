@@ -91,36 +91,39 @@
 					hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 					hr.onreadystatechange = function(){
 						if(hr.readyState==4 && hr.status==200){
-							var return_data=hr.responseText;
+							var data=hr.responseText;
+							var list=data.split(",");
 						}
 						
-						if(return_data=="1"){
-							submit.value = "Success!";
-							setTimeout(function(){
-								handleDOM.remove("signup");
-								handleDOM.remove("login");
-								page.main(em, pw);
-							}, 500);
-						}
-						else if(return_data=="2"){
-							submit.value = "Success!";
-							setTimeout(function(){
-								handleDOM.remove("signup");
-								handleDOM.remove("login");
-								page.authenticate(em, pw);
-							}, 500);
-						}
-						else if(return_data=="-1"){
-							//invalid password
-							submit.value = "Re-Submit";
-						}
-						else if(return_data==-"-2"){
-							//email not found
-							submit.value = "Re-Submit";
-						}
-						else if(return_data=="-3"){
-							//network communication error
-							submit.value = "Re-Submit";
+						if(list){
+							if(list[0]=="1"){
+								submit.value = "Success!";
+								setTimeout(function(){
+									handleDOM.remove("signup");
+									handleDOM.remove("login");
+									page.main(list[1], pw);
+								}, 500);
+							}
+							else if(list[0]=="2"){
+								submit.value = "Success!";
+								setTimeout(function(){
+									handleDOM.remove("signup");
+									handleDOM.remove("login");
+									page.authenticate(list[1], pw);
+								}, 500);
+							}
+							else if(list[0]=="-1"){
+								//invalid password
+								submit.value = "Re-Submit";
+							}
+							else if(list[0]==-"-2"){
+								//email not found
+								submit.value = "Re-Submit";
+							}
+							else if(list[0]=="-3"){
+								//network communication error
+								submit.value = "Re-Submit";
+							}
 						}
 					}
 					hr.send(vars);
@@ -179,7 +182,7 @@
 										handleDOM.remove("passwordDiv");
 										handleDOM.remove("emailDiv");
 										handleDOM.remove("signup");
-										page.authenticate(em, pw);
+										page.main(em, pw);
 									}, 500);
 								}
 							}
@@ -239,6 +242,7 @@
 	
 		//==================main page================================
 			main: function(em, pw){
+				console.log(em);
 				document.getElementById("body").style.backgroundColor="black";
 				//draw main screen
 					//slide function
@@ -584,21 +588,10 @@
 										previewIMG.style.top=docWidth*.8*.05+'px';
 										previewIMG.style.backgroundColor="blue";
 										
-										handleDOM.create("postTitle", "INPUT", postForm);
-										var postTitle=document.getElementById("postTitle");
-										postTitle.style.visibility="visible";
-										postTitle.type="text";
-										postTitle.style.fontSize=docWidth*.8*.059+'px';
-										postTitle.placeholder="Title(optional)...";
-										postTitle.style.position="absolute";
-										postTitle.style.width=docWidth*.8*.55+'px';
-										postTitle.style.height=docWidth*.8*.15+'px';
-										postTitle.style.left=docWidth*.8*.4+'px';
-										postTitle.style.top=docWidth*.8*.125+'px';
-										
 										handleDOM.create("postContent", "TEXTAREA", postForm);
 										var postContent=document.getElementById("postContent");
 										postContent.style.visibility="visible";
+										postContent.setAttribute("maxlength", 200);
 										postContent.style.fontSize=docWidth*.8*.059+'px';
 										postContent.placeholder="Your Story...";
 										postContent.style.position="absolute";
@@ -623,7 +616,6 @@
 												document.getElementById("useProfileBox").checked=false;
 											}
 											type.value=catValue;
-											postTitle.defaultValue=titleValue;
 											postContent.defaultValue=contentValue;
 										}
 										
@@ -644,30 +636,13 @@
 										submitPreview.style.fontFamily="helvetica, serif";
 										submitPreview.value="Preview";
 										submitPreview.onclick=function(){
+											submitPreview.style.top=docWidth*.8*1.35+'px';
 											if(type.value!='null'&&postContent.value){
 											//final submission area================================
-												var forget=false;
-												if(!postTitle.value){
-													postTitle.value=type.value;
-													forget=true;
-												}
 												optionsForm.style.visibility="hidden";
-												postTitle.style.visibility="hidden";
 												postContent.style.visibility="hidden";
 												postForm.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1+'px';
 												submitPreview.value="Submit";
-												
-												handleDOM.create("finalTitle", "DIV", postForm);
-												var finalTitle=document.getElementById("finalTitle");
-												finalTitle.style.fontSize=docWidth*.8*.059+'px';
-												finalTitle.style.color="#FFFFFF";
-												finalTitle.style.fontWeight="bold";
-												finalTitle.style.position="absolute";
-												finalTitle.style.width=docWidth*.8*.55+'px';
-												finalTitle.style.height=docWidth*.8*.15+'px';
-												finalTitle.style.left=docWidth*.8*.4+'px';
-												finalTitle.style.top=docWidth*.8*.125+'px';
-												finalTitle.innerHTML=postTitle.value;
 												
 												handleDOM.create("finalContent", "DIV", postForm);
 												var finalContent=document.getElementById("finalContent");
@@ -679,22 +654,19 @@
 												finalContent.style.left=docWidth*.8*.05+'px';
 												finalContent.style.top=docWidth*.8*.4+'px';
 												finalContent.style.marginBottom=docWidth*.8*.05;
+												finalContent.style.wordWrap="break-word";
 												finalContent.innerHTML=postContent.value;
 												
 												back.onclick=function(){
-													if(forget){
-														postTitle.value=null;
-													}
 													handleDOM.remove("finalContent");
-													handleDOM.remove("finalTitle");
-													createStory(document.getElementById("anonBox").checked,document.getElementById("useProfileBox").checked,type.value,postTitle.value, postContent.value);
+													createStory(document.getElementById("anonBox").checked,document.getElementById("useProfileBox").checked,type.value, postContent.value);
 												};
 												
 												//submit finalized details to server
 												submitPreview.onclick=function(){
 													var hr = new XMLHttpRequest();
 													var url= "http://strugglingdev-games.com/newPost.php";
-													var vars = "anonValue="+document.getElementById("anonBox").checked+"&picValue="+document.getElementById("useProfileBox").checked+"&catValue="+type.value+"&titleValue="+postTitle.value+"&contentValue="+postContent.value;
+													var vars = "anonValue="+document.getElementById("anonBox").checked+"&picValue="+document.getElementById("useProfileBox").checked+"&catValue="+type.value+"&contentValue="+postContent.value;
 													hr.open("POST", url, true);
 													hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 													hr.onreadystatechange = function(){
@@ -755,7 +727,8 @@
 									feedTitle.style.width=docWidth*.7+'px';
 									feedTitle.style.height=(docHeight-(picW*docWidth))*.1+'px';
 									feedTitle.style.backgroundColor="#990033";
-									feedTitle.style.fontSize=fontW*2+'px';
+									feedTitle.style.fontSize=(docHeight-(picW*docWidth))*.08+'px';
+									feedTitle.style.color="#FFFFFF";
 									feedTitle.innerHTML="&nbsp"+type;
 									
 									handleDOM.create("feedPost", "DIV", feed);
@@ -834,9 +807,11 @@
 										
 										var feedSlide=function(){
 											if(feedPosition==0&&didSwipe){
+												feedTitle.innerHTML="&nbsp"+type;
 												feedPost.innerHTML="<br><br>- - - -><br><br>Settings<br><br><br><br><- - - -<br><br>Begin Viewing";
 											}
 											else if(feedPosition==-1&&didSwipe){
+													feedTitle.innerHTML="&nbspSettings";
 													feedPost.innerHTML=null;
 													
 													handleDOM.create("includes", "DIV", feedPost);
@@ -975,12 +950,12 @@
 													}
 												}
 											else if(didSwipe){
-												
+												feedTitle.innerHTML="&nbsp"+type;
 												feedPost.innerHTML=null;
 												
 												//populate feed with data
 												var populate=function(){
-													if(feedTitleData[feedPosition]){
+													if(feedContentData[feedPosition]){
 														handleDOM.create("previewIMG", "DIV", feedPost);
 														var previewIMG=document.getElementById("previewIMG");
 														previewIMG.style.position="absolute";
@@ -990,16 +965,111 @@
 														previewIMG.style.top=docWidth*.8*.05+'px';
 														previewIMG.style.backgroundColor="blue";
 														
-														handleDOM.create("postTitle", "DIV", feedPost);
-														var postTitle=document.getElementById("postTitle");
-														postTitle.style.visibility="visible";
-														postTitle.style.fontSize=docWidth*.8*.059+'px';
-														postTitle.style.position="absolute";
-														postTitle.style.width=docWidth*.8*.55+'px';
-														postTitle.style.height=docWidth*.8*.15+'px';
-														postTitle.style.left=docWidth*.8*.4+'px';
-														postTitle.style.top=docWidth*.8*.125+'px';
-														postTitle.innerHTML=feedTitleData[feedPosition];
+														var voteCounter=feedUpVotesData[feedPosition]-feedDownVotesData[feedPosition];
+														
+														handleDOM.create("upVote", "IMG", feedPost);
+														var upVote=document.getElementById("upVote");
+														upVote.src="img/upVote.png";
+														upVote.style.position="absolute";
+														upVote.style.width=docWidth*.8*.1+'px';
+														upVote.style.height=docWidth*.8*.1+'px';
+														upVote.style.left=docWidth*.8*.4+'px';
+														upVote.style.top=docWidth*.8*.05+'px';
+														upVote.onclick=function(){
+																console.log("upclicked");
+																//call PHP file to read in feed settings and data
+																var hr = new XMLHttpRequest();
+																var url= "http://strugglingdev-games.com/affectVote.php";
+																var loadSend = loadedAt-1;
+																var data = "data=up&id="+em+"&postId="+feedIdData[feedPosition];
+																hr.open("POST", url, true);
+																hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+																hr.onreadystatechange = function(){
+																	if(hr.readyState==4 && hr.status==200){
+																		console.log("communicated with server");
+																		data=hr.responseText;
+																		if (data=="1"){
+																			voteCounter+=1;
+																			voteCount.innerHTML=voteCounter;
+																		}
+																		else if (data=="2"){
+																			voteCounter+=2;
+																			voteCount.innerHTML=voteCounter;
+																		}
+																		
+																		if(voteCounter<0){
+																			voteCount.style.color="#FF0000";
+																		}
+																		else{
+																			voteCount.style.color="#00FF00";
+																		}
+																	}
+																}
+																hr.send(data);
+														};
+														
+														handleDOM.create("voteCount", "DIV", feedPost);
+														var voteCount=document.getElementById("voteCount");
+														voteCount.style.position="absolute";
+														voteCount.style.width=docWidth*.8*.1+'px';
+														voteCount.style.height=docWidth*.8*.1+'px';
+														voteCount.style.left=docWidth*.8*.4+'px';
+														voteCount.style.top=docWidth*.8*.15+'px';
+														voteCount.style.fontSize=docWidth*.8*.1+'px';
+														if(voteCounter<0){
+															voteCount.style.color="#FF0000";
+														}
+														else{
+															voteCount.style.color="#00FF00";
+														}
+														voteCount.innerHTML=voteCounter;
+														
+														handleDOM.create("downVote", "IMG", feedPost);
+														var downVote=document.getElementById("downVote");
+														downVote.src="img/downVote.png";
+														downVote.style.position="absolute";
+														downVote.style.width=docWidth*.8*.1+'px';
+														downVote.style.height=docWidth*.8*.1+'px';
+														downVote.style.left=docWidth*.8*.4+'px';
+														downVote.style.top=docWidth*.8*.25+'px';
+														downVote.onclick=function(){
+																console.log("downclicked");
+																//call PHP file to read in feed settings and data
+																var hr = new XMLHttpRequest();
+																var url= "http://strugglingdev-games.com/affectVote.php";
+																var loadSend = loadedAt-1;
+																var data = "data=down&id="+em+"&postId="+feedIdData[feedPosition];
+																hr.open("POST", url, true);
+																hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+																hr.onreadystatechange = function(){
+																	if(hr.readyState==4 && hr.status==200){
+																		data=hr.responseText;
+																		if (data=="1"){
+																			voteCounter-=1;
+																			voteCount.innerHTML=voteCounter;
+																		}
+																		if (data=="2"){
+																			voteCounter-=2;
+																			voteCount.innerHTML=voteCounter;
+																		}
+																		
+																		if(voteCounter<0){
+																			voteCount.style.color="#FF0000";
+																		}
+																		else{
+																			voteCount.style.color="#00FF00";
+																		}
+																	}
+																}
+																hr.send(data);
+														};
+														
+														/*
+														handleDOM.create("addFav", "IMG", feedPost);
+														var addFav=document.getElementById("addFav");
+														
+														handleDOM.create("comments", "IMG", feedPost);
+														var comments=document.getElementById("comments");*/
 														
 														handleDOM.create("postContent", "DIV", feedPost);
 														var postContent=document.getElementById("postContent");
@@ -1011,20 +1081,32 @@
 														postContent.style.left=docWidth*.8*.05+'px';
 														postContent.style.top=docWidth*.8*.4+'px';
 														postContent.style.marginBottom=docWidth*.8*.05;
+														postContent.style.wordWrap="break-word";
 														postContent.innerHTML=feedContentData[feedPosition];
+														
+														handleDOM.create("footer", "DIV", feedPost);
+														var footer=document.getElementById("footer");
+														footer.style.position="absolute";
+														footer.style.width=docWidth*.8*.8+'px';
+														footer.style.height=docWidth*.8*.08+'px';
+														footer.style.left=docWidth*.8*.1+'px';
+														footer.style.top=$('#feedPost').height()+docWidth*.8*.01+'px';
+														footer.style.fontSize=docWidth*.8*.059+'px';
+														footer.innerHTML="<b>"+feedCreatorData[feedPosition]+"</b><br>"+feedDateData[feedPosition];
+														
 													}
 												}
 												if(!loaded){
 													//call PHP file to read in feed settings and data
 													var hr = new XMLHttpRequest();
 													var url= "http://strugglingdev-games.com/populateFeed.php";
-													var data = "data=stories";
+													var loadSend = loadedAt-1;
+													var data = "data=stories&offset="+loadSend+"&type="+type;
 													hr.open("POST", url, true);
 													hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 													hr.onreadystatechange = function(){	
 														if(hr.readyState==4 && hr.status==200){
 															data=hr.responseText;
-															
 															//populate JS data with query result
 															feedData=data.split("+");
 															for(var i=0; i<15; i++){
@@ -1032,15 +1114,13 @@
 																	var splitter=feedData[i].split(",");
 																	feedIdData[i+loadedAt]=splitter[0];
 																	feedTypeData[i+loadedAt]=splitter[1];
-																	feedTitleData[i+loadedAt]=splitter[2];
-																	feedContentData[i+loadedAt]=splitter[3];
+																	feedContentData[i+loadedAt]=splitter[2];
 																	feedDateData[i+loadedAt]=splitter[4];
-																	feedCreatorData[i+loadedAt]=splitter[5];
-																	feedUpVotesData[i+loadedAt]=splitter[6];
-																	feedDownVotesData[i+loadedAt]=splitter[7];
+																	feedCreatorData[i+loadedAt]=splitter[3];
+																	feedUpVotesData[i+loadedAt]=splitter[5];
+																	feedDownVotesData[i+loadedAt]=splitter[6];
 																}
 																else{
-																	feedTitleData[i+loadedAt]="Not Found";
 																	feedContentData[i+loadedAt]="You've reached the edge of the abyss, kid.<br>There's nowhere else to go; better start over and see what's new.";
 																	feedCreatorData[i+loadedAt]="Mr. Anonymous";
 																	feedDateData[i+loadedAt]="March 12, 1885";
