@@ -346,7 +346,7 @@
 						title.style.position="relative";
 						title.style.width=(.9-picW)*docWidth-(picW*.4*docWidth)+'px';
 						title.style.left=picW*.2*docWidth+'px';
-						title.style.height=(picW*.8*docWidth)/2+'px';
+						title.style.height=(picW*.8*docWidth)+'px';
 						title.style.top=picW*.05*docWidth+'px';
 					
 					//create search div
@@ -401,7 +401,7 @@
 							storiesImg.style.height=(docHeight-(picW*docWidth))*.5*.8+'px';
 							storiesImg.onclick=function(){storyOptions()};
 							
-							//story options=================================
+			//===========================================story options=================================
 							var storyOptions=function(){
 								if(document.getElementById("stories")){
 									handleDOM.remove("stories");
@@ -752,6 +752,8 @@
 									var feedCreatorData=[];
 									var feedUpVotesData=[];
 									var feedDownVotesData=[];
+									var feedUpVotedData=[];
+									var feedDownVotedData=[];
 									
 									feedPost.addEventListener('touchstart', function(e){
 										//e.preventDefault();
@@ -964,41 +966,54 @@
 														
 														handleDOM.create("upVote", "IMG", feedPost);
 														var upVote=document.getElementById("upVote");
-														upVote.src="img/upVote.png";
+														if(feedUpVotedData[feedPosition]==1){
+															upVote.src="img/upVoteClicked.png";
+														}
+														else{
+															upVote.src="img/upVote.png";
+														}
 														upVote.style.position="absolute";
 														upVote.style.width=docWidth*.8*.1+'px';
 														upVote.style.height=docWidth*.8*.1+'px';
 														upVote.style.left=docWidth*.8*.4+'px';
 														upVote.style.top=docWidth*.8*.05+'px';
 														upVote.onclick=function(){
-																//call PHP file to read in feed settings and data
-																var hr = new XMLHttpRequest();
-																var url= "http://strugglingdev-games.com/affectVote.php";
-																var loadSend = loadedAt-1;
-																var data = "data=up&id="+em+"&postId="+feedIdData[feedPosition];
-																hr.open("POST", url, true);
-																hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-																hr.onreadystatechange = function(){
-																	if(hr.readyState==4 && hr.status==200){
-																		data=hr.responseText;
-																		if (data=="1"){
-																			voteCounter+=1;
-																			voteCount.innerHTML=voteCounter;
-																		}
-																		else if (data=="2"){
-																			voteCounter+=2;
-																			voteCount.innerHTML=voteCounter;
-																		}
-																		
-																		if(voteCounter<0){
-																			voteCount.style.color="#FF0000";
-																		}
-																		else{
-																			voteCount.style.color="#00FF00";
-																		}
+															upVote.src="img/upVoteClicked.png";
+															downVote.src="img/downVote.png";
+															
+															//call PHP file to read in feed settings and data
+															var hr = new XMLHttpRequest();
+															var url= "http://strugglingdev-games.com/affectVote.php";
+															var loadSend = loadedAt-1;
+															var data = "data=up&id="+em+"&postId="+feedIdData[feedPosition];
+															hr.open("POST", url, true);
+															hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+															hr.onreadystatechange = function(){
+																if(hr.readyState==4 && hr.status==200){
+																	data=hr.responseText;
+																	var returned=data.split(",");
+																	if(returned[0]!="alreadyVoted"){
+																		voteCounter=returned[0];
+																		voteCount.innerHTML=voteCounter;
+																	}
+																	else{
+																		voteCounter=returned[1];
+																		voteCount.innerHTML=voteCounter;
+																		upVote.src="img/upVote.png";
+																	}
+																	
+																	if(voteCounter<0){
+																		voteCount.style.color="#FF0000";
+																	}
+																	else{
+																		voteCount.style.color="#00FF00";
 																	}
 																}
-																hr.send(data);
+															}
+															
+															voteCount.innerHTML="<img src='img/loading.gif'/>";
+															
+															hr.send(data);
 														};
 														
 														handleDOM.create("voteCount", "DIV", feedPost);
@@ -1019,41 +1034,52 @@
 														
 														handleDOM.create("downVote", "IMG", feedPost);
 														var downVote=document.getElementById("downVote");
-														downVote.src="img/downVote.png";
+														if(feedDownVotedData[feedPosition]==1){
+															downVote.src="img/downVoteClicked.png";
+														}
+														else{
+															downVote.src="img/downVote.png";
+														}
 														downVote.style.position="absolute";
 														downVote.style.width=docWidth*.8*.1+'px';
 														downVote.style.height=docWidth*.8*.1+'px';
 														downVote.style.left=docWidth*.8*.4+'px';
 														downVote.style.top=docWidth*.8*.25+'px';
 														downVote.onclick=function(){
-																//call PHP file to read in feed settings and data
-																var hr = new XMLHttpRequest();
-																var url= "http://strugglingdev-games.com/affectVote.php";
-																var loadSend = loadedAt-1;
-																var data = "data=down&id="+em+"&postId="+feedIdData[feedPosition];
-																hr.open("POST", url, true);
-																hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-																hr.onreadystatechange = function(){
-																	if(hr.readyState==4 && hr.status==200){
-																		data=hr.responseText;
-																		if (data=="1"){
-																			voteCounter-=1;
-																			voteCount.innerHTML=voteCounter;
-																		}
-																		if (data=="2"){
-																			voteCounter-=2;
-																			voteCount.innerHTML=voteCounter;
-																		}
-																		
-																		if(voteCounter<0){
-																			voteCount.style.color="#FF0000";
-																		}
-																		else{
-																			voteCount.style.color="#00FF00";
-																		}
-																	}
+															upVote.src="img/upVote.png";
+															downVote.src="img/downVoteClicked.png";
+															
+															//call PHP file to read in feed settings and data
+															var hr = new XMLHttpRequest();
+															var url= "http://strugglingdev-games.com/affectVote.php";
+															var loadSend = loadedAt-1;
+															var data = "data=down&id="+em+"&postId="+feedIdData[feedPosition];
+															hr.open("POST", url, true);
+															hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+															hr.onreadystatechange = function(){
+																data=hr.responseText;
+																var returned=data.split(",");
+																if(returned[0]!="alreadyVoted"){
+																	voteCounter=returned[0];
+																	voteCount.innerHTML=voteCounter;
 																}
-																hr.send(data);
+																else{
+																	voteCounter=returned[1];
+																	voteCount.innerHTML=voteCounter;
+																	downVote.src="img/downVote.png";
+																}
+																
+																if(voteCounter<0){
+																	voteCount.style.color="#FF0000";
+																}
+																else{
+																	voteCount.style.color="#00FF00";
+																}
+															}
+															
+															voteCount.innerHTML="<img src='img/loading.gif'/>";
+															
+															hr.send(data);
 														};
 														
 														
@@ -1111,7 +1137,7 @@
 													var hr = new XMLHttpRequest();
 													var url= "http://strugglingdev-games.com/populateFeed.php";
 													var loadSend = loadedAt-1;
-													var data = "data=stories&offset="+loadSend+"&type="+type;
+													var data = "data=stories&offset="+loadSend+"&type="+type+"&id="+em;
 													hr.open("POST", url, true);
 													hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 													hr.onreadystatechange = function(){	
@@ -1129,6 +1155,8 @@
 																	feedCreatorData[i+loadedAt]=splitter[3];
 																	feedUpVotesData[i+loadedAt]=splitter[5];
 																	feedDownVotesData[i+loadedAt]=splitter[6];
+																	feedUpVotedData[i+loadedAt]=splitter[7];
+																	feedDownVotedData[i+loadedAt]=splitter[8];
 																}
 																else{
 																	feedContentData[i+loadedAt]="You've reached the edge of the abyss, kid.<br>There's nowhere else to go; better start over and see what's new.";
