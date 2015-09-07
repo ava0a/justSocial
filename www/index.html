@@ -722,9 +722,9 @@
 									feedTitle.style.top=(docHeight-(docWidth*picW))*(1/8)*.3+'px';
 									feedTitle.style.width=docWidth*.7+'px';
 									feedTitle.style.height=(docHeight-(picW*docWidth))*.1+'px';
-									feedTitle.style.backgroundColor="#990033";
+									//feedTitle.style.backgroundColor="#990033";
 									feedTitle.style.fontSize=(docHeight-(picW*docWidth))*.08+'px';
-									feedTitle.style.color="#FFFFFF";
+									feedTitle.style.color="#FBB310";
 									feedTitle.innerHTML="&nbsp"+type;
 									
 									handleDOM.create("feedPost", "DIV", feed);
@@ -754,6 +754,7 @@
 									var feedDownVotesData=[];
 									var feedUpVotedData=[];
 									var feedDownVotedData=[];
+									var feedFavoritedData=[];
 									
 									feedPost.addEventListener('touchstart', function(e){
 										//e.preventDefault();
@@ -1085,14 +1086,37 @@
 														
 														handleDOM.create("addFav", "IMG", feedPost);
 														var addFav=document.getElementById("addFav");
-														addFav.src="img/addFavorite.png";
+														if(feedFavoritedData[feedPosition]==1){
+															addFav.src="img/addedFavorite.png";
+														}
+														else{
+															addFav.src="img/addFavorite.png";
+														}
 														addFav.style.position="absolute";
 														addFav.style.width=docWidth*.8*.1+'px';
 														addFav.style.height=docWidth*.8*.1+'px';
 														addFav.style.left=docWidth*.8*.8+'px';
 														addFav.style.top=docWidth*.8*.05+'px';
 														addFav.onclick=function(){
-															alert("Favorites not yet implemented.");
+															var hr = new XMLHttpRequest();
+															var url= "http://strugglingdev-games.com/addFavorite.php";
+															var loadSend = loadedAt-1;
+															var data = "id="+em+"&postId="+feedIdData[feedPosition];
+															hr.open("POST", url, true);
+															hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+															hr.onreadystatechange = function(){
+																if(hr.readyState==4 && hr.status==200){
+																	data = hr.responseText;
+																	if(data==1){
+																		addFav.src="img/addedFavorite.png";
+																	}
+																	else if(data==2){
+																		addFav.src="img/addFavorite.png";
+																	}
+																}
+															}
+															addFav.src="img/loading.gif";
+															hr.send(data);
 														}
 														
 														handleDOM.create("comments", "IMG", feedPost);
@@ -1150,13 +1174,17 @@
 																	var splitter=feedData[i].split(",");
 																	feedIdData[i+loadedAt]=splitter[0];
 																	feedTypeData[i+loadedAt]=splitter[1];
-																	feedContentData[i+loadedAt]=splitter[2];
-																	feedDateData[i+loadedAt]=splitter[4];
-																	feedCreatorData[i+loadedAt]=splitter[3];
-																	feedUpVotesData[i+loadedAt]=splitter[5];
-																	feedDownVotesData[i+loadedAt]=splitter[6];
-																	feedUpVotedData[i+loadedAt]=splitter[7];
-																	feedDownVotedData[i+loadedAt]=splitter[8];
+																	feedContentData[i+loadedAt]=splitter[9];
+																	feedDateData[i+loadedAt]=splitter[3];
+																	feedCreatorData[i+loadedAt]=splitter[2];
+																	feedUpVotesData[i+loadedAt]=splitter[4];
+																	feedDownVotesData[i+loadedAt]=splitter[5];
+																	feedUpVotedData[i+loadedAt]=splitter[6];
+																	feedDownVotedData[i+loadedAt]=splitter[7];
+																	feedFavoritedData[i+loadedAt]=splitter[8];
+																	//for(var i=10; splitter[i]; i++){
+																	//	feedContentData[i+loadedAt]=splitter[i];
+																	//}
 																}
 																else{
 																	feedContentData[i+loadedAt]="You've reached the edge of the abyss, kid.<br>There's nowhere else to go; better start over and see what's new.";
@@ -1209,7 +1237,8 @@
 								confessions.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1+'px';
 								confessions.style.width=docWidth*.8+'px';
 								confessions.style.height=(docHeight-(docWidth*picW))*.1+'px';
-								confessions.style.backgroundColor="#990033";
+								//confessions.style.backgroundColor="#990033";
+								confessions.style.color="#FBB310";
 								confessions.onclick=function(){rollFeed("Confessions");};
 								
 								handleDOM.create("funny", "DIV", feed);
@@ -1221,7 +1250,8 @@
 								funny.style.top=(docHeight-(docWidth*picW))*(3/8)*.3+(docHeight-(docWidth*picW))*.2+'px';
 								funny.style.width=docWidth*.8+'px';
 								funny.style.height=(docHeight-(docWidth*picW))*.1+'px';
-								funny.style.backgroundColor="#990033";
+								//funny.style.backgroundColor="#990033";
+								funny.style.color="#FBB310";
 								funny.onclick=function(){rollFeed("Funny");};
 								
 								handleDOM.create("interesting", "DIV", feed);
@@ -1233,7 +1263,8 @@
 								interesting.style.top=(docHeight-(docWidth*picW))*(4/8)*.3+(docHeight-(docWidth*picW))*.3+'px';
 								interesting.style.width=docWidth*.8+'px';
 								interesting.style.height=(docHeight-(docWidth*picW))*.1+'px';
-								interesting.style.backgroundColor="#990033";
+								//interesting.style.backgroundColor="#990033";
+								interesting.style.color="#FBB310";
 								interesting.onclick=function(){rollFeed("Interesting");};
 								
 								handleDOM.create("scary", "DIV", feed);
@@ -1245,7 +1276,8 @@
 								scary.style.top=(docHeight-(docWidth*picW))*(5/8)*.3+(docHeight-(docWidth*picW))*.4+'px';
 								scary.style.width=docWidth*.8+'px';
 								scary.style.height=(docHeight-(docWidth*picW))*.1+'px';
-								scary.style.backgroundColor="#990033";
+								//scary.style.backgroundColor="#990033";
+								scary.style.color="#FBB310";
 								scary.onclick=function(){rollFeed("Scary");};
 								
 								handleDOM.create("sexy", "DIV", feed);
@@ -1257,7 +1289,8 @@
 								sexy.style.top=(docHeight-(docWidth*picW))*(6/8)*.3+(docHeight-(docWidth*picW))*.5+'px';
 								sexy.style.width=docWidth*.8+'px';
 								sexy.style.height=(docHeight-(docWidth*picW))*.1+'px';
-								sexy.style.backgroundColor="#990033";
+								//sexy.style.backgroundColor="#990033";
+								sexy.style.color="#FBB310";
 								sexy.onclick=function(){rollFeed("Sexy");};
 								
 								handleDOM.create("random", "DIV", feed);
@@ -1269,7 +1302,8 @@
 								random.style.top=(docHeight-(docWidth*picW))*(7/8)*.3+(docHeight-(docWidth*picW))*.6+'px';
 								random.style.width=docWidth*.8+'px';
 								random.style.height=(docHeight-(docWidth*picW))*.1+'px';
-								random.style.backgroundColor="#990033";
+								//random.style.backgroundColor="#990033";
+								random.style.color="#FBB310";
 								random.onclick=function(){rollFeed("Random");};
 								
 							}
