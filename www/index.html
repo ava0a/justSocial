@@ -1217,6 +1217,13 @@
 									
 								};
 								
+								var confessionsOn=false;
+								var funnyOn=false;
+								var interestingOn=false;
+								var scaryOn=false;
+								var sexyOn=false;
+								var randomOn=false;
+								
 								//create different story options
 								handleDOM.create("newStory", "IMG", feed);
 								var newStory=document.getElementById("newStory");
@@ -1235,11 +1242,36 @@
 								confessions.style.position="absolute";
 								confessions.style.left=docWidth*.1+'px';
 								confessions.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1+'px';
-								confessions.style.width=docWidth*.8+'px';
+								confessions.style.width=docWidth*.6+'px';
 								confessions.style.height=(docHeight-(docWidth*picW))*.1+'px';
 								//confessions.style.backgroundColor="#990033";
 								confessions.style.color="#FBB310";
 								confessions.onclick=function(){rollFeed("Confessions");};
+								
+								handleDOM.create("confessionsButton", "IMG", feed);
+								var confessionsButton=document.getElementById("confessionsButton");
+								confessionsButton.style.position="absolute";
+								confessionsButton.style.right=docWidth*.1+'px';
+								confessionsButton.style.top=(docHeight-(docWidth*picW))*(1/8)*.3+(docHeight-(docWidth*picW))*.1+'px';
+								confessionsButton.style.width=docWidth*.2+'px';
+								confessionsButton.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								confessionsButton.onclick=function(){
+									if(confessionsOn){
+										confessionsOn=false;
+										confessionsButton.src="img/confessionOff.png";
+									}
+									else{
+										confessionsOn=true;
+										confessionsButton.src="img/confessionOn.png";
+									}
+								}
+								
+								if(confessionsOn){
+									confessionsButton.src="img/confessionOn.png";
+								}
+								else{
+									confessionsButton.src="img/confessionOff.png";
+								}
 								
 								handleDOM.create("funny", "DIV", feed);
 								var funny=document.getElementById("funny");
@@ -1248,11 +1280,36 @@
 								funny.style.position="absolute";
 								funny.style.left=docWidth*.1+'px';
 								funny.style.top=(docHeight-(docWidth*picW))*(3/8)*.3+(docHeight-(docWidth*picW))*.2+'px';
-								funny.style.width=docWidth*.8+'px';
+								funny.style.width=docWidth*.6+'px';
 								funny.style.height=(docHeight-(docWidth*picW))*.1+'px';
 								//funny.style.backgroundColor="#990033";
 								funny.style.color="#FBB310";
 								funny.onclick=function(){rollFeed("Funny");};
+								
+								handleDOM.create("funnyButton", "IMG", feed);
+								var funnyButton=document.getElementById("funnyButton");
+								funnyButton.style.position="absolute";
+								funnyButton.style.right=docWidth*.1+'px';
+								funnyButton.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.2+'px';
+								funnyButton.style.width=docWidth*.2+'px';
+								funnyButton.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								funnyButton.onclick=function(){
+									if(funnyOn){
+										funnyOn=false;
+										funnyButton.src="img/funnyOff.png";
+									}
+									else{
+										funnyOn=true;
+										funnyButton.src="img/funnyOn.png";
+									}
+								}
+								
+								if(funnyOn){
+									funnyButton.src="img/funnyOn.png";
+								}
+								else{
+									funnyButton.src="img/funnyOff.png";
+								}
 								
 								handleDOM.create("interesting", "DIV", feed);
 								var interesting=document.getElementById("interesting");
@@ -1261,11 +1318,36 @@
 								interesting.style.position="absolute";
 								interesting.style.left=docWidth*.1+'px';
 								interesting.style.top=(docHeight-(docWidth*picW))*(4/8)*.3+(docHeight-(docWidth*picW))*.3+'px';
-								interesting.style.width=docWidth*.8+'px';
+								interesting.style.width=docWidth*.6+'px';
 								interesting.style.height=(docHeight-(docWidth*picW))*.1+'px';
 								//interesting.style.backgroundColor="#990033";
 								interesting.style.color="#FBB310";
 								interesting.onclick=function(){rollFeed("Interesting");};
+								
+								handleDOM.create("interestingButton", "IMG", feed);
+								var interestingButton=document.getElementById("interestingButton");
+								interestingButton.style.position="absolute";
+								interestingButton.style.right=docWidth*.1+'px';
+								interestingButton.style.top=(docHeight-(docWidth*picW))*(3/8)*.3+(docHeight-(docWidth*picW))*.3+'px';
+								interestingButton.style.width=docWidth*.2+'px';
+								interestingButton.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								interestingButton.onclick=function(){
+									if(interestingOn){
+										interestingOn=false;
+										interestingButton.src="img/interestingOff.png";
+									}
+									else{
+										interestingOn=true;
+										interestingButton.src="img/interestingOn.png";
+									}
+								}
+								
+								if(interestingOn){
+									interestingButton.src="img/interestingOn.png";
+								}
+								else{
+									interestingButton.src="img/interestingOff.png";
+								}
 								
 								handleDOM.create("scary", "DIV", feed);
 								var scary=document.getElementById("scary");
@@ -1274,11 +1356,36 @@
 								scary.style.position="absolute";
 								scary.style.left=docWidth*.1+'px';
 								scary.style.top=(docHeight-(docWidth*picW))*(5/8)*.3+(docHeight-(docWidth*picW))*.4+'px';
-								scary.style.width=docWidth*.8+'px';
+								scary.style.width=docWidth*.6+'px';
 								scary.style.height=(docHeight-(docWidth*picW))*.1+'px';
 								//scary.style.backgroundColor="#990033";
 								scary.style.color="#FBB310";
 								scary.onclick=function(){rollFeed("Scary");};
+								
+								handleDOM.create("scaryButton", "IMG", feed);
+								var scaryButton=document.getElementById("scaryButton");
+								scaryButton.style.position="absolute";
+								scaryButton.style.right=docWidth*.1+'px';
+								scaryButton.style.top=(docHeight-(docWidth*picW))*(4/8)*.3+(docHeight-(docWidth*picW))*.4+'px';
+								scaryButton.style.width=docWidth*.2+'px';
+								scaryButton.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								scaryButton.onclick=function(){
+									if(scaryOn){
+										scaryOn=false;
+										scaryButton.src="img/scaryOff.png";
+									}
+									else{
+										scaryOn=true;
+										scaryButton.src="img/scaryOn.png";
+									}
+								}
+								
+								if(scaryOn){
+									scaryButton.src="img/scaryOn.png";
+								}
+								else{
+									scaryButton.src="img/scaryOff.png";
+								}
 								
 								handleDOM.create("sexy", "DIV", feed);
 								var sexy=document.getElementById("sexy");
@@ -1287,11 +1394,36 @@
 								sexy.style.position="absolute";
 								sexy.style.left=docWidth*.1+'px';
 								sexy.style.top=(docHeight-(docWidth*picW))*(6/8)*.3+(docHeight-(docWidth*picW))*.5+'px';
-								sexy.style.width=docWidth*.8+'px';
+								sexy.style.width=docWidth*.6+'px';
 								sexy.style.height=(docHeight-(docWidth*picW))*.1+'px';
 								//sexy.style.backgroundColor="#990033";
 								sexy.style.color="#FBB310";
 								sexy.onclick=function(){rollFeed("Sexy");};
+								
+								handleDOM.create("sexyButton", "IMG", feed);
+								var sexyButton=document.getElementById("sexyButton");
+								sexyButton.style.position="absolute";
+								sexyButton.style.right=docWidth*.1+'px';
+								sexyButton.style.top=(docHeight-(docWidth*picW))*(5/8)*.3+(docHeight-(docWidth*picW))*.5+'px';
+								sexyButton.style.width=docWidth*.2+'px';
+								sexyButton.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								sexyButton.onclick=function(){
+									if(sexyOn){
+										sexyOn=false;
+										sexyButton.src="img/sexyOff.png";
+									}
+									else{
+										sexyOn=true;
+										sexyButton.src="img/sexyOn.png";
+									}
+								}
+								
+								if(sexyOn){
+									sexyButton.src="img/sexyOn.png";
+								}
+								else{
+									sexyButton.src="img/sexyOff.png";
+								}
 								
 								handleDOM.create("random", "DIV", feed);
 								var random=document.getElementById("random");
@@ -1300,11 +1432,36 @@
 								random.style.position="absolute";
 								random.style.left=docWidth*.1+'px';
 								random.style.top=(docHeight-(docWidth*picW))*(7/8)*.3+(docHeight-(docWidth*picW))*.6+'px';
-								random.style.width=docWidth*.8+'px';
+								random.style.width=docWidth*.6+'px';
 								random.style.height=(docHeight-(docWidth*picW))*.1+'px';
 								//random.style.backgroundColor="#990033";
 								random.style.color="#FBB310";
 								random.onclick=function(){rollFeed("Random");};
+								
+								handleDOM.create("randomButton", "IMG", feed);
+								var randomButton=document.getElementById("randomButton");
+								randomButton.style.position="absolute";
+								randomButton.style.right=docWidth*.1+'px';
+								randomButton.style.top=(docHeight-(docWidth*picW))*(6/8)*.3+(docHeight-(docWidth*picW))*.6+'px';
+								randomButton.style.width=docWidth*.2+'px';
+								randomButton.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								randomButton.onclick=function(){
+									if(randomOn){
+										randomOn=false;
+										randomButton.src="img/randomOff.png";
+									}
+									else{
+										randomOn=true;
+										randomButton.src="img/randomOn.png";
+									}
+								}
+								
+								if(randomOn){
+									randomButton.src="img/randomOn.png";
+								}
+								else{
+									randomButton.src="img/randomOff.png";
+								}
 								
 							}
 						
