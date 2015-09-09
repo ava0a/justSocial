@@ -419,6 +419,12 @@
 								back.style.width=(docHeight-(docWidth*picW))*.075+'px';
 								back.style.height=(docHeight-(docWidth*picW))*.075+'px';
 								back.onclick=function(){
+									handleDOM.remove("randomButton");
+									handleDOM.remove("sexyButton");
+									handleDOM.remove("scaryButton");
+									handleDOM.remove("interestingButton");
+									handleDOM.remove("funnyButton");
+									handleDOM.remove("confessionsButton");
 									handleDOM.remove("random");
 									handleDOM.remove("sexy");
 									handleDOM.remove("scary");
@@ -427,6 +433,7 @@
 									handleDOM.remove("confessions");
 									handleDOM.remove("newStory");
 									handleDOM.remove("back");
+									handleDOM.remove("goStories");
 									page.main(em,pw);
 								};
 								
@@ -434,6 +441,12 @@
 								var createStory=function(anonValue, picValue, catValue, titleValue, contentValue){
 									
 									if(document.getElementById("newStory")){
+										handleDOM.remove("randomButton");
+										handleDOM.remove("sexyButton");
+										handleDOM.remove("scaryButton");
+										handleDOM.remove("interestingButton");
+										handleDOM.remove("funnyButton");
+										handleDOM.remove("confessionsButton");
 										handleDOM.remove("random");
 										handleDOM.remove("sexy");
 										handleDOM.remove("scary");
@@ -441,6 +454,7 @@
 										handleDOM.remove("funny");
 										handleDOM.remove("confessions");
 										handleDOM.remove("newStory");
+										handleDOM.remove("goStories");
 									}
 									//adjust back onclick
 									back.onclick=function(){
@@ -707,6 +721,12 @@
 								var rollFeed = function(type){
 									var loadedAt=0;
 									
+									handleDOM.remove("randomButton");
+									handleDOM.remove("sexyButton");
+									handleDOM.remove("scaryButton");
+									handleDOM.remove("interestingButton");
+									handleDOM.remove("funnyButton");
+									handleDOM.remove("confessionsButton");
 									handleDOM.remove("random");
 									handleDOM.remove("sexy");
 									handleDOM.remove("scary");
@@ -714,6 +734,7 @@
 									handleDOM.remove("funny");
 									handleDOM.remove("confessions");
 									handleDOM.remove("newStory");
+									handleDOM.remove("goStories");
 									
 									handleDOM.create("feedTitle", "DIV", feed);
 									var feedTitle=document.getElementById("feedTitle");
@@ -725,7 +746,7 @@
 									//feedTitle.style.backgroundColor="#990033";
 									feedTitle.style.fontSize=(docHeight-(picW*docWidth))*.08+'px';
 									feedTitle.style.color="#FBB310";
-									feedTitle.innerHTML="&nbsp"+type;
+									feedTitle.innerHTML="&nbspBlurbs";
 									
 									handleDOM.create("feedPost", "DIV", feed);
 									var feedPost=document.getElementById("feedPost");
@@ -806,7 +827,7 @@
 										
 										var feedSlide=function(){
 											if(feedPosition==0&&didSwipe){
-												feedTitle.innerHTML="&nbsp"+type;
+												feedTitle.innerHTML="&nbspBlurbs";
 												feedPost.innerHTML="<br><br>- - - -><br><br>Settings<br><br><br><br><- - - -<br><br>Begin Viewing";
 											}
 											else if(feedPosition==-1&&didSwipe){
@@ -948,7 +969,7 @@
 													}
 												}
 											else if(didSwipe){
-												feedTitle.innerHTML="&nbsp"+type;
+												feedTitle.innerHTML="&nbspBlurbs";//type
 												feedPost.innerHTML=null;
 												
 												//populate feed with data
@@ -994,13 +1015,20 @@
 																	data=hr.responseText;
 																	var returned=data.split(",");
 																	if(returned[0]!="alreadyVoted"){
-																		voteCounter=returned[0];
+																		feedUpVotesData[feedPosition]=returned[0];
+																		feedDownVotesData[feedPosition]=returned[1];
+																		feedUpVotedData[feedPosition]=1;
+																		upVote.src="img/upVoteClicked.png";
+																		voteCounter=feedUpVotesData[feedPosition]-feedDownVotesData[feedPosition];
 																		voteCount.innerHTML=voteCounter;
 																	}
 																	else{
-																		voteCounter=returned[1];
-																		voteCount.innerHTML=voteCounter;
+																		feedUpVotesData[feedPosition]=returned[1];
+																		feedDownVotesData[feedPosition]=returned[2];
+																		feedUpVotedData[feedPosition]=0;
 																		upVote.src="img/upVote.png";
+																		voteCounter=feedUpVotesData[feedPosition]-feedDownVotesData[feedPosition];
+																		voteCount.innerHTML=voteCounter;
 																	}
 																	
 																	if(voteCounter<0){
@@ -1061,13 +1089,20 @@
 																data=hr.responseText;
 																var returned=data.split(",");
 																if(returned[0]!="alreadyVoted"){
-																	voteCounter=returned[0];
+																	feedUpVotesData[feedPosition]=returned[0];
+																	feedDownVotesData[feedPosition]=returned[1];
+																	feedDownVotedData[feedPosition]=1;
+																	downVote.src="img/downVoteClicked.png";
+																	voteCounter=feedUpVotesData[feedPosition]-feedDownVotesData[feedPosition];
 																	voteCount.innerHTML=voteCounter;
 																}
 																else{
-																	voteCounter=returned[1];
-																	voteCount.innerHTML=voteCounter;
+																	feedUpVotesData[feedPosition]=returned[1];
+																	feedDownVotesData[feedPosition]=returned[2];
+																	feedDownVotedData[feedPosition]=0;
 																	downVote.src="img/downVote.png";
+																	voteCounter=feedUpVotesData[feedPosition]-feedDownVotesData[feedPosition];
+																	voteCount.innerHTML=voteCounter;
 																}
 																
 																if(voteCounter<0){
@@ -1167,6 +1202,7 @@
 													hr.onreadystatechange = function(){	
 														if(hr.readyState==4 && hr.status==200){
 															data=hr.responseText;
+															console.log(data);
 															//populate JS data with query result
 															feedData=data.split("+");
 															for(var i=0; i<15; i++){
@@ -1235,6 +1271,45 @@
 								newStory.style.height=(docHeight-(docWidth*picW))*.1+'px';
 								newStory.onclick=function(){createStory();};
 								
+								handleDOM.create("goStories", "IMG", feed);
+								var goStories=document.getElementById("goStories");
+								goStories.style.position="absolute";
+								goStories.style.left=(docWidth-(docHeight-(docWidth*picW))*.1)*.8+'px';
+								goStories.style.top=(docHeight-(docWidth*picW))*(1/8)*.3+'px';
+								goStories.style.width=(docHeight-(docWidth*picW))*.2+'px';
+								goStories.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								
+								var checkGo=function(){
+									if(!confessionsOn&&!funnyOn&&!interestingOn&&!scaryOn&&!sexyOn&&!randomOn){
+										goStories.onclick=function(){alert("Select at least one category.");};
+										goStories.src="img/goNull.png";
+									}
+									else{
+										var typeCode=0;
+										if(confessionsOn){
+											typeCode+=1;
+										}
+										if(funnyOn){
+											typeCode+=10;
+										}
+										if(interestingOn){
+											typeCode+=100;
+										}
+										if(scaryOn){
+											typeCode+=1000;
+										}
+										if(sexyOn){
+											typeCode+=10000;
+										}
+										if(randomOn){
+											typeCode+=100000;
+										}
+										goStories.onclick=function(){rollFeed(typeCode);};
+										goStories.src="img/go.png";
+									}
+								}
+								checkGo();
+								
 								handleDOM.create("confessions", "DIV", feed);
 								var confessions=document.getElementById("confessions");
 								confessions.style.fontSize=fontW*2+'px';
@@ -1242,19 +1317,30 @@
 								confessions.style.position="absolute";
 								confessions.style.left=docWidth*.1+'px';
 								confessions.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1+'px';
-								confessions.style.width=docWidth*.6+'px';
+								confessions.style.width=docWidth*.8+'px';
 								confessions.style.height=(docHeight-(docWidth*picW))*.1+'px';
-								//confessions.style.backgroundColor="#990033";
+								confessions.style.verticalAlign="middle";
+								confessions.style.backgroundColor="#990033";
 								confessions.style.color="#FBB310";
-								confessions.onclick=function(){rollFeed("Confessions");};
 								
 								handleDOM.create("confessionsButton", "IMG", feed);
 								var confessionsButton=document.getElementById("confessionsButton");
 								confessionsButton.style.position="absolute";
 								confessionsButton.style.right=docWidth*.1+'px';
-								confessionsButton.style.top=(docHeight-(docWidth*picW))*(1/8)*.3+(docHeight-(docWidth*picW))*.1+'px';
+								confessionsButton.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1+'px';
 								confessionsButton.style.width=docWidth*.2+'px';
 								confessionsButton.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								confessions.onclick=function(){
+									if(confessionsOn){
+										confessionsOn=false;
+										confessionsButton.src="img/confessionOff.png";
+									}
+									else{
+										confessionsOn=true;
+										confessionsButton.src="img/confessionOn.png";
+									}
+									checkGo();
+								}
 								confessionsButton.onclick=function(){
 									if(confessionsOn){
 										confessionsOn=false;
@@ -1264,6 +1350,7 @@
 										confessionsOn=true;
 										confessionsButton.src="img/confessionOn.png";
 									}
+									checkGo();
 								}
 								
 								if(confessionsOn){
@@ -1280,19 +1367,29 @@
 								funny.style.position="absolute";
 								funny.style.left=docWidth*.1+'px';
 								funny.style.top=(docHeight-(docWidth*picW))*(3/8)*.3+(docHeight-(docWidth*picW))*.2+'px';
-								funny.style.width=docWidth*.6+'px';
+								funny.style.width=docWidth*.8+'px';
 								funny.style.height=(docHeight-(docWidth*picW))*.1+'px';
-								//funny.style.backgroundColor="#990033";
+								funny.style.backgroundColor="#990033";
 								funny.style.color="#FBB310";
-								funny.onclick=function(){rollFeed("Funny");};
 								
 								handleDOM.create("funnyButton", "IMG", feed);
 								var funnyButton=document.getElementById("funnyButton");
 								funnyButton.style.position="absolute";
 								funnyButton.style.right=docWidth*.1+'px';
-								funnyButton.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.2+'px';
+								funnyButton.style.top=(docHeight-(docWidth*picW))*(3/8)*.3+(docHeight-(docWidth*picW))*.2+'px';
 								funnyButton.style.width=docWidth*.2+'px';
 								funnyButton.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								funny.onclick=function(){
+									if(funnyOn){
+										funnyOn=false;
+										funnyButton.src="img/funnyOff.png";
+									}
+									else{
+										funnyOn=true;
+										funnyButton.src="img/funnyOn.png";
+									}
+									checkGo();
+								}
 								funnyButton.onclick=function(){
 									if(funnyOn){
 										funnyOn=false;
@@ -1302,6 +1399,7 @@
 										funnyOn=true;
 										funnyButton.src="img/funnyOn.png";
 									}
+									checkGo();
 								}
 								
 								if(funnyOn){
@@ -1318,19 +1416,29 @@
 								interesting.style.position="absolute";
 								interesting.style.left=docWidth*.1+'px';
 								interesting.style.top=(docHeight-(docWidth*picW))*(4/8)*.3+(docHeight-(docWidth*picW))*.3+'px';
-								interesting.style.width=docWidth*.6+'px';
+								interesting.style.width=docWidth*.8+'px';
 								interesting.style.height=(docHeight-(docWidth*picW))*.1+'px';
-								//interesting.style.backgroundColor="#990033";
+								interesting.style.backgroundColor="#990033";
 								interesting.style.color="#FBB310";
-								interesting.onclick=function(){rollFeed("Interesting");};
 								
 								handleDOM.create("interestingButton", "IMG", feed);
 								var interestingButton=document.getElementById("interestingButton");
 								interestingButton.style.position="absolute";
 								interestingButton.style.right=docWidth*.1+'px';
-								interestingButton.style.top=(docHeight-(docWidth*picW))*(3/8)*.3+(docHeight-(docWidth*picW))*.3+'px';
+								interestingButton.style.top=(docHeight-(docWidth*picW))*(4/8)*.3+(docHeight-(docWidth*picW))*.3+'px';
 								interestingButton.style.width=docWidth*.2+'px';
 								interestingButton.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								interesting.onclick=function(){
+									if(interestingOn){
+										interestingOn=false;
+										interestingButton.src="img/interestingOff.png";
+									}
+									else{
+										interestingOn=true;
+										interestingButton.src="img/interestingOn.png";
+									}
+									checkGo();
+								}
 								interestingButton.onclick=function(){
 									if(interestingOn){
 										interestingOn=false;
@@ -1340,6 +1448,7 @@
 										interestingOn=true;
 										interestingButton.src="img/interestingOn.png";
 									}
+									checkGo();
 								}
 								
 								if(interestingOn){
@@ -1356,19 +1465,29 @@
 								scary.style.position="absolute";
 								scary.style.left=docWidth*.1+'px';
 								scary.style.top=(docHeight-(docWidth*picW))*(5/8)*.3+(docHeight-(docWidth*picW))*.4+'px';
-								scary.style.width=docWidth*.6+'px';
+								scary.style.width=docWidth*.8+'px';
 								scary.style.height=(docHeight-(docWidth*picW))*.1+'px';
-								//scary.style.backgroundColor="#990033";
+								scary.style.backgroundColor="#990033";
 								scary.style.color="#FBB310";
-								scary.onclick=function(){rollFeed("Scary");};
 								
 								handleDOM.create("scaryButton", "IMG", feed);
 								var scaryButton=document.getElementById("scaryButton");
 								scaryButton.style.position="absolute";
 								scaryButton.style.right=docWidth*.1+'px';
-								scaryButton.style.top=(docHeight-(docWidth*picW))*(4/8)*.3+(docHeight-(docWidth*picW))*.4+'px';
+								scaryButton.style.top=(docHeight-(docWidth*picW))*(5/8)*.3+(docHeight-(docWidth*picW))*.4+'px';
 								scaryButton.style.width=docWidth*.2+'px';
 								scaryButton.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								scary.onclick=function(){
+									if(scaryOn){
+										scaryOn=false;
+										scaryButton.src="img/scaryOff.png";
+									}
+									else{
+										scaryOn=true;
+										scaryButton.src="img/scaryOn.png";
+									}
+									checkGo();
+								}
 								scaryButton.onclick=function(){
 									if(scaryOn){
 										scaryOn=false;
@@ -1378,6 +1497,7 @@
 										scaryOn=true;
 										scaryButton.src="img/scaryOn.png";
 									}
+									checkGo();
 								}
 								
 								if(scaryOn){
@@ -1394,19 +1514,29 @@
 								sexy.style.position="absolute";
 								sexy.style.left=docWidth*.1+'px';
 								sexy.style.top=(docHeight-(docWidth*picW))*(6/8)*.3+(docHeight-(docWidth*picW))*.5+'px';
-								sexy.style.width=docWidth*.6+'px';
+								sexy.style.width=docWidth*.8+'px';
 								sexy.style.height=(docHeight-(docWidth*picW))*.1+'px';
-								//sexy.style.backgroundColor="#990033";
+								sexy.style.backgroundColor="#990033";
 								sexy.style.color="#FBB310";
-								sexy.onclick=function(){rollFeed("Sexy");};
 								
 								handleDOM.create("sexyButton", "IMG", feed);
 								var sexyButton=document.getElementById("sexyButton");
 								sexyButton.style.position="absolute";
 								sexyButton.style.right=docWidth*.1+'px';
-								sexyButton.style.top=(docHeight-(docWidth*picW))*(5/8)*.3+(docHeight-(docWidth*picW))*.5+'px';
+								sexyButton.style.top=(docHeight-(docWidth*picW))*(6/8)*.3+(docHeight-(docWidth*picW))*.5+'px';
 								sexyButton.style.width=docWidth*.2+'px';
 								sexyButton.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								sexy.onclick=function(){
+									if(sexyOn){
+										sexyOn=false;
+										sexyButton.src="img/sexyOff.png";
+									}
+									else{
+										sexyOn=true;
+										sexyButton.src="img/sexyOn.png";
+									}
+									checkGo();
+								}
 								sexyButton.onclick=function(){
 									if(sexyOn){
 										sexyOn=false;
@@ -1416,6 +1546,7 @@
 										sexyOn=true;
 										sexyButton.src="img/sexyOn.png";
 									}
+									checkGo();
 								}
 								
 								if(sexyOn){
@@ -1432,19 +1563,29 @@
 								random.style.position="absolute";
 								random.style.left=docWidth*.1+'px';
 								random.style.top=(docHeight-(docWidth*picW))*(7/8)*.3+(docHeight-(docWidth*picW))*.6+'px';
-								random.style.width=docWidth*.6+'px';
+								random.style.width=docWidth*.8+'px';
 								random.style.height=(docHeight-(docWidth*picW))*.1+'px';
-								//random.style.backgroundColor="#990033";
+								random.style.backgroundColor="#990033";
 								random.style.color="#FBB310";
-								random.onclick=function(){rollFeed("Random");};
 								
 								handleDOM.create("randomButton", "IMG", feed);
 								var randomButton=document.getElementById("randomButton");
 								randomButton.style.position="absolute";
 								randomButton.style.right=docWidth*.1+'px';
-								randomButton.style.top=(docHeight-(docWidth*picW))*(6/8)*.3+(docHeight-(docWidth*picW))*.6+'px';
+								randomButton.style.top=(docHeight-(docWidth*picW))*(7/8)*.3+(docHeight-(docWidth*picW))*.6+'px';
 								randomButton.style.width=docWidth*.2+'px';
 								randomButton.style.height=(docHeight-(docWidth*picW))*.1+'px';
+								random.onclick=function(){
+									if(randomOn){
+										randomOn=false;
+										randomButton.src="img/randomOff.png";
+									}
+									else{
+										randomOn=true;
+										randomButton.src="img/randomOn.png";
+									}
+									checkGo();
+								}
 								randomButton.onclick=function(){
 									if(randomOn){
 										randomOn=false;
@@ -1454,6 +1595,7 @@
 										randomOn=true;
 										randomButton.src="img/randomOn.png";
 									}
+									checkGo();
 								}
 								
 								if(randomOn){
