@@ -323,7 +323,8 @@
 					handleDOM.create("profileImg", "IMG", king);
 					var profileImg = document.getElementById("profileImg");
 					profileImg.src="img/profile.jpg"
-					profileImg.style.position="absolute";
+					profileImg.style.position="fixed";
+					profileImg.style.zIndex="1";
 					profileImg.style.left=0+'px';
 					profileImg.style.top=0+'px';
 					profileImg.style.width=picW*docWidth+'px';
@@ -333,7 +334,8 @@
 					//create dashboard
 					handleDOM.create("dashboard", "DIV", king);
 					var dashboard = document.getElementById("dashboard");
-					dashboard.style.position="absolute";
+					dashboard.style.position="fixed";
+					dashboard.style.zIndex="1";
 					dashboard.style.left=picW*docWidth+'px';
 					dashboard.style.top=0+'px';
 					dashboard.style.width=(.9-picW)*docWidth+'px';
@@ -352,7 +354,8 @@
 					//create search div
 					handleDOM.create("search", "DIV", king);
 					var search = document.getElementById("search");
-					search.style.position="absolute";
+					search.style.position="fixed";
+					search.style.zIndex="1";
 					search.style.left=.9*docWidth+'px';
 					search.style.top=0+'px';
 					search.style.width=.1*docWidth+'px';
@@ -602,7 +605,7 @@
 										handleDOM.create("postContent", "TEXTAREA", postForm);
 										var postContent=document.getElementById("postContent");
 										postContent.style.visibility="visible";
-										postContent.setAttribute("maxlength", 200);
+										postContent.setAttribute("maxlength", 500);
 										postContent.style.fontSize=docWidth*.8*.059+'px';
 										postContent.placeholder="Your Story...";
 										postContent.style.position="absolute";
@@ -647,7 +650,6 @@
 										submitPreview.style.fontFamily="helvetica, serif";
 										submitPreview.value="Preview";
 										submitPreview.onclick=function(){
-											submitPreview.style.top=docWidth*.8*1.35+'px';
 											if(type.value!='null'&&postContent.value){
 											//final submission area================================
 												optionsForm.style.visibility="hidden";
@@ -668,7 +670,11 @@
 												finalContent.style.wordWrap="break-word";
 												finalContent.innerHTML=postContent.value;
 												
+												postForm.style.height=($('#finalContent').height()-docWidth*.8*.7)+docWidth*.8*1.35+'px';
+												submitPreview.style.top=$('#postForm').height()-$('#submitPreview').height()-(docHeight-(docWidth*picW))*(1/8)*.3+'px';
+
 												back.onclick=function(){
+													postForm.style.height=docWidth*.8*1.35+'px';
 													handleDOM.remove("finalContent");
 													createStory(document.getElementById("anonBox").checked,document.getElementById("useProfileBox").checked,type.value, postContent.value);
 												};
@@ -1018,7 +1024,9 @@
 																		feedUpVotesData[feedPosition]=returned[0];
 																		feedDownVotesData[feedPosition]=returned[1];
 																		feedUpVotedData[feedPosition]=1;
+																		feedDownVotedData[feedPosition]=0;
 																		upVote.src="img/upVoteClicked.png";
+																		downVote.src="img/downVote.png";
 																		voteCounter=feedUpVotesData[feedPosition]-feedDownVotesData[feedPosition];
 																		voteCount.innerHTML=voteCounter;
 																	}
@@ -1092,7 +1100,9 @@
 																	feedUpVotesData[feedPosition]=returned[0];
 																	feedDownVotesData[feedPosition]=returned[1];
 																	feedDownVotedData[feedPosition]=1;
+																	feedUpVotedData[feedPosition]=0;
 																	downVote.src="img/downVoteClicked.png";
+																	upVote.src="img/upVote.png";
 																	voteCounter=feedUpVotesData[feedPosition]-feedDownVotesData[feedPosition];
 																	voteCount.innerHTML=voteCounter;
 																}
@@ -1178,6 +1188,7 @@
 														postContent.style.marginBottom=docWidth*.8*.05;
 														postContent.style.wordWrap="break-word";
 														postContent.innerHTML=feedContentData[feedPosition];
+														feedPost.style.height=$('#postContent').height()-docWidth*.8*.7+(docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.8+"px";
 														
 														handleDOM.create("footer", "DIV", feedPost);
 														var footer=document.getElementById("footer");
@@ -1202,7 +1213,6 @@
 													hr.onreadystatechange = function(){	
 														if(hr.readyState==4 && hr.status==200){
 															data=hr.responseText;
-															console.log(data);
 															//populate JS data with query result
 															feedData=data.split("+");
 															for(var i=0; i<15; i++){
