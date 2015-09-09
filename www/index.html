@@ -788,17 +788,23 @@
 										
 										var touchObj = e.changedTouches[0];
 										startX = parseInt(touchObj.clientX); 
+										startY = parseInt(touchObj.clientY);
+										
 									}, false);
 									
 									feedPost.addEventListener('touchmove', function(e){
-										e.preventDefault();
+										//e.preventDefault();
 									
 										moved=true;
 									
 										var touchObj = e.changedTouches[0];
 										dist = parseInt(touchObj.clientX) - startX;
+										yDist = parseInt(touchObj.clientY) - startY;
 										
 										feedPost.style.left=docWidth*.1+dist+'px';
+										if(yDist<0){
+										//	feedPost.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1+yDist+'px';
+										}
 										
 									}, false);
 									
@@ -1188,7 +1194,7 @@
 														postContent.style.marginBottom=docWidth*.8*.05;
 														postContent.style.wordWrap="break-word";
 														postContent.innerHTML=feedContentData[feedPosition];
-														feedPost.style.height=$('#postContent').height()-docWidth*.8*.7+(docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.8+"px";
+														feedPost.style.height=$('#postContent').height()-docWidth*.8*.7+(docHeight-((docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1)-(picW*docWidth))*.9+"px";
 														
 														handleDOM.create("footer", "DIV", feedPost);
 														var footer=document.getElementById("footer");
