@@ -11,7 +11,7 @@ var app = {
         document.addEventListener('deviceready', this.onDeviceReady, false);
 		//====================================================================================
 		//FALSE DEVICE-READY SEND
-		//setTimeout(function(){app.receivedEvent('deviceready');}, 1000);
+		setTimeout(function(){app.receivedEvent('deviceready');}, 10);
 		//FALSE DEVICE-READY SEND
 		//====================================================================================
     },

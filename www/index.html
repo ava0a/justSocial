@@ -767,8 +767,13 @@
 									
 									var feedPosition=0;
 									
+									var totalPostBottom=0;
+									var mobile = false;
 									var startX = 0;
 									var dist = 0;
+									var yDist= 0;
+									var check = 0;
+									var oldDist =0;
 									var moved = false;
 									var feedData;
 									var feedIdData=[];
@@ -799,16 +804,41 @@
 									
 										var touchObj = e.changedTouches[0];
 										dist = parseInt(touchObj.clientX) - startX;
-										yDist = parseInt(touchObj.clientY) - startY;
+										yDist = parseInt(touchObj.clientY) - startY + oldDist;
 										
 										feedPost.style.left=docWidth*.1+dist+'px';
-										if(yDist<0){
-										//	feedPost.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1+yDist+'px';
+										totalPostBottom=$('#feedPost').offset().top+$('#feedPost').height()+$('#footer').height()*2;
+									
+										if(totalPostBottom>docHeight){
+											mobile=true;
+											if($('#feedPost').position().top<=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1){
+												feedPost.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1+yDist+'px';
+											}
+											else{
+												feedPost.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1-1+'px';
+												yDist=0;
+											}
+											if($('#feedPost').position().top>(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1){
+												feedPost.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1-1+'px';
+												yDist=0;
+											}
+											check = yDist;
 										}
+										if(totalPostBottom<=docHeight&&mobile){
+											if(yDist>check){
+												if($('#feedPost').position().top<=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1){
+													feedPost.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1+yDist+'px';
+												}
+											}
+										}
+										
 										
 									}, false);
 									
 									feedPost.addEventListener('touchend', function(e){
+										
+										oldDist=yDist;
+										
 										var didSwipe=false;
 										
 										var touchObj = e.changedTouches[0];
@@ -819,11 +849,17 @@
 											if(feedPosition>=0){
 												feedPosition-=1;
 												didSwipe=true;
+												yDist=0;
+												oldDist=0;
+												mobile=false;
 											}
 										}
 										else if(dist<=-1*docWidth*.2 && moved){
 											feedPosition+=1;
 											didSwipe=true;
+											yDist=0;
+											oldDist=0;
+											mobile=false;
 										}
 										var loaded=true;
 										var loadCheck=function(){
@@ -838,6 +874,9 @@
 										loadCheck();
 										
 										var feedSlide=function(){
+											if(didSwipe){
+												feedPost.style.top=(docHeight-(docWidth*picW))*(2/8)*.3+(docHeight-(docWidth*picW))*.1-1+'px';
+											}
 											if(feedPosition==0&&didSwipe){
 												feedTitle.innerHTML="&nbspBlurbs";
 												feedPost.innerHTML="<br><br>- - - -><br><br>Settings<br><br><br><br><- - - -<br><br>Begin Viewing";
